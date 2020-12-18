@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { checkPasswordStrength } from 'src/app/shared/misc/functions/checkPasswordStrength';
-import { User } from 'src/app/shared/misc/functions/models/user/user';
-import { AuthService } from 'src/app/shared/misc/functions/services/auth.service';
+import { User } from 'src/app/shared/models/user/user';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 
 @Component({
