@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { checkPasswordStrength } from 'src/app/misc/functions/checkPasswordStrength';
-import { User } from 'src/app/models/user/user';
-import { AuthService } from 'src/app/services/auth.service';
+import { checkPasswordStrength } from 'src/app/shared/misc/functions/checkPasswordStrength';
+import { User } from 'src/app/shared/misc/functions/models/user/user';
+import { AuthService } from 'src/app/shared/misc/functions/services/auth.service';
+
 
 @Component({
   selector: 'app-register',
@@ -12,9 +13,9 @@ import { AuthService } from 'src/app/services/auth.service';
 export class RegisterComponent implements OnInit {
   user: User = new User();
   registerForm: FormGroup;
-  isRegistered = false;
+  success = false;
   isSubmitted = false;
-  errorMessage = '';
+  message = '';
 
   constructor(private authService: AuthService) { }
 
@@ -75,15 +76,15 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(this.user).subscribe(
       data => {
-        console.log(data);
-        this.isRegistered = true;
+        this.message = data.message;
+        this.success = !!data.success;
         this.isSubmitted = true;
         this.registerForm.reset();
       },
       err => {
         console.log(err);
-        this.errorMessage = err.error.message;
-        this.isRegistered = false;
+        this.message = err.error.message;
+        this.success = err.error.success;
         this.isSubmitted = true;
       }
     );

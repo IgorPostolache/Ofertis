@@ -105,13 +105,13 @@
       <span>Already have an account?&nbsp;</span>
       <a [routerLink]="['/login']">Log in!</a>
     </p>
-    <div class="alert alert-success" *ngIf="isRegistered">
-      Your registration is successfull!
+    <div class="alert alert-success" *ngIf="success">
+      {{ message }}
     </div>
-    <div class="alert alert-warning" *ngIf="isSubmitted && !isRegistered">
+    <div class="alert alert-warning" *ngIf="isSubmitted && !success">
       Failed to register!
       <br />
-      {{ errorMessage }}
+      {{ message }}
     </div>
 
   </div>

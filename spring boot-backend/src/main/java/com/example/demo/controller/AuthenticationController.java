@@ -76,6 +76,6 @@ public class AuthenticationController {
 				.orElseThrow(()-> new AppException("Role user was not set"));
 		user.setRoles(Collections.singleton(role));
 		userService.save(user);
-		return new ResponseEntity(new ApiResponse(true, "User was created."), HttpStatus.CREATED);
+		return new ResponseEntity(new ApiResponse(true, "You registered successefully"), HttpStatus.CREATED);
 	}
 }
