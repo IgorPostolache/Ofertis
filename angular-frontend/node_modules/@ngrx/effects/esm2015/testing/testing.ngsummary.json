@@ -1,0 +1,1 @@
+{"moduleName":null,"summaries":[{"symbol":{"__symbol":0,"members":[]},"metadata":{"__symbolic":"function","parameters":["factoryOrSource"],"value":{"__symbolic":"error","message":"Lambda not supported","fileName":"modules/effects/testing/src/testing.ts"}}}],"symbols":[{"__symbol":0,"name":"provideMockActions","filePath":"./testing"}]}

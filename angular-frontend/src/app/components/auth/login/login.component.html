@@ -2,7 +2,7 @@
   <div class="col-md-4">
     <h1>Log in</h1>
     <hr><br>
-    <form (ngSubmit)="onSubmit()" ngNativeValidate>
+    <form (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="email">Email</label>
         <input [(ngModel)]="user.email" name="email" type="email" required class="form-control" id="email"
@@ -24,10 +24,7 @@
       <span>Don't have an account?&nbsp;</span>
       <a [routerLink]="['/register']">Sign up!</a>
     </p>
-    <div class="alert alert-success" *ngIf="isLogged">
-      Your authentication is successfull!
-    </div>
-    <div class="alert alert-warning" *ngIf="isSubmitted && !isLogged">
+    <div class="alert alert-warning" *ngIf="errorMessage">
       Failed to login!
       <br />
       {{ errorMessage }}

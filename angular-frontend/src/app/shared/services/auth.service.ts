@@ -23,4 +23,7 @@ export class AuthService {
     return this.http.post<User>(url, {
       name: user.name, username: user.username, email: user.email, password: user.password}, httpOptions);
   }
+  getJWT(): string {
+    return localStorage.getItem('jwt');
+  }
 }

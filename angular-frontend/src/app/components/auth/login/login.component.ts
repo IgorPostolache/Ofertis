@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { Login } from 'src/app/core/store/actions/auth.actions';
+import { AppState, selectAuthState } from 'src/app/core/store/app.states';
 import { User } from 'src/app/shared/models/user/user';
-import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,29 +12,21 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 })
 export class LoginComponent implements OnInit {
   user: User = new User();
+  getState: Observable<any>;
+  errorMessage: string | null;
 
-  constructor(private authService: AuthService) { }
-  isLogged = false;
-  isSubmitted = false;
-  errorMessage = '';
+  constructor(private _store: Store<AppState>) {
+    this.getState = this._store.select(selectAuthState);
+  }
 
   ngOnInit(): void {
-
+    this.getState.subscribe(state => {
+      this.errorMessage = state.errorMessage
+    });
   }
 
   onSubmit(): void {
-    this.authService.login(this.user).subscribe(
-      data => {
-        console.log(data);
-        this.isLogged = true;
-        this.isSubmitted = true;
-      },
-      err => {
-        console.log(err);
-        this.errorMessage = err.error.message;
-        this.isLogged = false;
-        this.isSubmitted = true;
-      }
-    );
+    this._store.dispatch(new Login(Object.assign({},this.user)));
   }
+
 }

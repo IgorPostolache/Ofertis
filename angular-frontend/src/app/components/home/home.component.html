@@ -1,8 +1,13 @@
-<div class="row">
-  <div class="col-md-4">
+<div class="row justify-content-center">
+  <div class="col-4">
     <h1>Home Page</h1>
     <br/>
-    <a [routerLink]="['/login']" class="btn btn-primary">Log in</a>
-    <a [routerLink]="['/register']" class="btn btn-danger ml-3">Register</a>
+    <div *ngIf="!isAuthenticated">
+      <a [routerLink]="['/login']" class="btn btn-primary">Log in</a>
+      <a [routerLink]="['/register']" class="btn btn-danger ml-3">Register</a>
+    </div>
+    <div *ngIf="isAuthenticated">
+    <a [routerLink]="['*']" class="btn btn-warning" (click)="logout()">Log out</a>
+    </div>
   </div>
 </div>

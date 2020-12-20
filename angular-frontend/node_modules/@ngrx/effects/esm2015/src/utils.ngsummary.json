@@ -1,0 +1,1 @@
+{"moduleName":null,"summaries":[{"symbol":{"__symbol":0,"members":[]},"metadata":{"__symbolic":"function","parameters":["instance"],"value":{"__symbolic":"call","expression":{"__symbolic":"select","member":"getPrototypeOf"},"arguments":[{"__symbolic":"reference","name":"instance"}]}}}],"symbols":[{"__symbol":0,"name":"getSourceForInstance","filePath":"./utils"}]}

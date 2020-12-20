@@ -76,6 +76,16 @@ public class AuthenticationController {
 				.orElseThrow(()-> new AppException("Role user was not set"));
 		user.setRoles(Collections.singleton(role));
 		userService.save(user);
-		return new ResponseEntity(new ApiResponse(true, "You registered successefully !!!"), HttpStatus.CREATED);
+		// Will return a jwt token instead of message
+		//return new ResponseEntity(new ApiResponse(true, "You registered successefully !!!"), HttpStatus.CREATED);
+		Authentication authentication = authManager.authenticate(
+			new UsernamePasswordAuthenticationToken(
+				register.getEmail(),
+				register.getPassword()
+			)
+		);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String jwt = jwtProvider.generateToken(authentication);
+		return new ResponseEntity(new JwtResponse(jwt), HttpStatus.CREATED);
 	}
 }

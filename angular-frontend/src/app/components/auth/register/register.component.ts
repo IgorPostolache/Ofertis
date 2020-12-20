@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { Register } from 'src/app/core/store/actions/auth.actions';
+import { AppState, selectAuthState } from 'src/app/core/store/app.states';
 import { checkPasswordStrength } from 'src/app/shared/misc/functions/checkPasswordStrength';
 import { User } from 'src/app/shared/models/user/user';
-import { AuthService } from 'src/app/shared/services/auth.service';
+
 
 
 @Component({
@@ -13,13 +17,17 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 export class RegisterComponent implements OnInit {
   user: User = new User();
   registerForm: FormGroup;
-  success = false;
-  isSubmitted = false;
-  message = '';
+  getState: Observable<any>;
+  errorMessage: string | null;
 
-  constructor(private authService: AuthService) { }
+  constructor(private _store: Store<AppState>) {
+    this.getState = this._store.select(selectAuthState);
+   }
 
   ngOnInit(): void {
+    this.getState.subscribe((state) =>
+      this.errorMessage = state.errorMessage
+    );
     this.registerForm = new FormGroup({
       'name': new FormControl(null, [
         Validators.required,
@@ -74,20 +82,6 @@ export class RegisterComponent implements OnInit {
     this.user.email = formvalue.email;
     this.user.password = formvalue.password;
 
-    this.authService.register(this.user).subscribe(
-      data => {
-        this.message = data.message;
-        this.success = !!data.success;
-        this.isSubmitted = true;
-        this.registerForm.reset();
-      },
-      err => {
-        console.log(err);
-        this.message = err.error.message;
-        this.success = err.error.success;
-        this.isSubmitted = true;
-      }
-    );
-
+    this._store.dispatch(new Register(Object.assign({},this.user)));
   }
 }

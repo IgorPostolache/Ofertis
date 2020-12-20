@@ -1,0 +1,7 @@
+/**
+ * Generated bundle index. Do not edit.
+ */
+export * from './index';
+export { getSourceMetadata as ɵa } from './src/effects_metadata';
+export { _provideForRootGuard as ɵc, createEffects as ɵb } from './src/effects_module';
+export { FEATURE_EFFECTS as ɵh, ROOT_EFFECTS as ɵf, _FEATURE_EFFECTS as ɵg, _ROOT_EFFECTS as ɵe, _ROOT_EFFECTS_GUARD as ɵd } from './src/tokens';
