@@ -2,6 +2,6 @@
 
 Implementing Strip as a payment option.
 
-The app is build in spring boot 5 + angular 10.
+The app is build in spring boot 2 + angular 11.
 
 I am developing this app for learning purpose.
