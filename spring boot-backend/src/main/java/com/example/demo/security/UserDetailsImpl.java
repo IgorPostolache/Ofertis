@@ -12,28 +12,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.demo.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+@AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
-	private Long id;
-	private String name;
+	@Getter private Long id;
+	@Getter private String name;
 	private String username;
 	
 	@JsonIgnore
-	private String email;
+	@Getter private String email;
 	
 	@JsonIgnore
 	private String password;
 	
 	private Collection<? extends GrantedAuthority> authorities;
-	
-	public UserDetailsImpl(Long id, String name, String username, String email, String password,
-			Collection<? extends GrantedAuthority> authorities) {
-		this.id = id;
-		this.name = name;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.authorities = authorities;
-	}
 
 	public static UserDetailsImpl build(User user) {
 		List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
@@ -48,17 +41,6 @@ public class UserDetailsImpl implements UserDetails {
 		);
 	}
 	
-	public Long getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

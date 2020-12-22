@@ -2,8 +2,6 @@ package com.example.demo.security;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -14,16 +12,16 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class JwtProvider {
 	@Value("${ofertis.app.secret}")
 	private String secretKey;
 	
 	@Value("${ofertis.app.expiration}")
 	private int expiration;
-	
-	private final static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
 	
 	public String generateToken(Authentication auth) {
 		UserDetailsImpl userDetailsImpl = (UserDetailsImpl) auth.getPrincipal();
@@ -40,15 +38,15 @@ public class JwtProvider {
 			Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwt);
 			return true;
 		} catch (SignatureException e) {
-			logger.error("Failed token signature: {}", e.getMessage());
+			log.error("Failed token signature: {}", e.getMessage());
 		} catch (MalformedJwtException e) {
-			logger.error("Malformed token : {}", e.getMessage());
+			log.error("Malformed token : {}", e.getMessage());
 		} catch (ExpiredJwtException e) {
-			logger.error("Expired token : {}", e.getMessage());
+			log.error("Expired token : {}", e.getMessage());
 		} catch (UnsupportedJwtException e) {
-			logger.error("Unsupported token : {}", e.getMessage());
+			log.error("Unsupported token : {}", e.getMessage());
 		} catch (IllegalArgumentException e) {
-			logger.error("Empty token : {}", e.getMessage());
+			log.error("Empty token : {}", e.getMessage());
 		}
 		return false;
 	}
