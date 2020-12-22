@@ -26,9 +26,9 @@ public class JwtProvider {
 	private final static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
 	
 	public String generateToken(Authentication auth) {
-		
+		UserDetailsImpl userDetailsImpl = (UserDetailsImpl) auth.getPrincipal();
 		return Jwts.builder()
-				.setSubject(auth.getName())
+				.setSubject(userDetailsImpl.getEmail())
 				.setIssuedAt(new Date())
 				.setExpiration(new Date(new Date().getTime() + expiration))
 				.signWith(SignatureAlgorithm.HS512, secretKey)

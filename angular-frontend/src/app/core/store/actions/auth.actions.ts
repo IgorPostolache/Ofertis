@@ -7,7 +7,8 @@ export enum AuthActionTypes {
   LOGOUT = '[Auth] Logout',
   REGISTER = '[Auth] Register',
   REGISTER_SUCCESS = '[Auth] Register Success',
-  REGISTER_FAILURE = '[Auth] Register Failure'
+  REGISTER_FAILURE = '[Auth] Register Failure',
+  PROFILE_ALL = '[Auth] Profile All',
 }
 
 export class Login implements Action {
@@ -44,7 +45,12 @@ export class RegisterFailure implements Action {
   constructor(public payload: any){}
 }
 
-export type All =
+export class ProfileAll implements Action {
+  readonly type = AuthActionTypes.PROFILE_ALL;
+  constructor(public payload: any){}
+}
+
+export type AuthType =
   | Login
   | LoginSuccess
   | LoginFailure
@@ -52,3 +58,4 @@ export type All =
   | Register
   | RegisterSuccess
   | RegisterFailure
+  | ProfileAll

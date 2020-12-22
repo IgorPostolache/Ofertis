@@ -7,4 +7,5 @@ export class User {
   token?: string;
   success?: string;
   message?: string;
+  role?: string;
 }

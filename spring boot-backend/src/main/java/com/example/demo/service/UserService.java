@@ -15,8 +15,8 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public Optional<User> loadByEmail(String email) {
-		return userRepository.findByEmail(email);
+	public Optional<User> loadByUsernameOrEmail(String username, String email) {
+		return userRepository.findByUsernameOrEmail(username, email);
 	}
 	
 	public Boolean existsByUsername(String username) {

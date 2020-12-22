@@ -1,5 +1,5 @@
 import { User } from "src/app/shared/models/user/user";
-import { All, AuthActionTypes } from "../actions/auth.actions";
+import { AuthType, AuthActionTypes } from "../actions/auth.actions";
 
 export interface State {
   isAuthenticated: boolean;
@@ -13,15 +13,17 @@ export const initialState: State = {
   errorMessage: null
 }
 
-export function reducer(state = initialState, action: All): State {
+export function reducer(state = initialState, action: AuthType): State {
   switch(action.type) {
     case AuthActionTypes.LOGIN_SUCCESS:
       return {
         ...state,
         isAuthenticated: true,
         user: {
-          token: action.payload.token,
-          email: action.payload.email
+          username: action.payload.username,
+          email: action.payload.email,
+          role: action.payload.role,
+          token: action.payload.token
         },
         errorMessage: null
       }
@@ -38,6 +40,7 @@ export function reducer(state = initialState, action: All): State {
         isAuthenticated: true,
         user: {
           email: action.payload.email,
+          role: action.payload.role,
           token: action.payload.token
         },
         errorMessage: null
@@ -46,6 +49,11 @@ export function reducer(state = initialState, action: All): State {
       return {
         ...state,
         errorMessage: action.payload.errorMessage.error.message
+      }
+    case AuthActionTypes.PROFILE_ALL:
+      return {
+        ...state,
+        errorMessage: action.payload
       }
     default: {
       return state;

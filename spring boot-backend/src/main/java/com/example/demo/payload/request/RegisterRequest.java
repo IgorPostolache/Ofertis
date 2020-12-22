@@ -1,5 +1,7 @@
 package com.example.demo.payload.request;
 
+import java.util.Set;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -21,6 +23,8 @@ public class RegisterRequest {
 	@NotBlank
 	@Size(min = 6, max = 20)
 	private String password;
+	
+	private Set<String> role;
 
 	public String getName() {
 		return name;
@@ -52,6 +56,14 @@ public class RegisterRequest {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Set<String> getRole() {
+		return role;
+	}
+
+	public void setRole(Set<String> role) {
+		this.role = role;
 	}
 	
 	

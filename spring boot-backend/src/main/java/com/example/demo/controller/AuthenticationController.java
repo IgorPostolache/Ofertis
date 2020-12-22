@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -18,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.enums.RoleName;
-import com.example.demo.exception.AppException;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.payload.request.LoginRequest;
@@ -46,7 +48,8 @@ public class AuthenticationController {
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+	// SO FAR I ONLY WANT TO RETURN 1 ROLE, 
+	// MAYBE IN FUTURE I WILL RETURN AN ARRAY WITH ALL ROLES...
 	@PostMapping("/login")
 	public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest login) {
 		Authentication authentication = authManager.authenticate(
@@ -57,9 +60,18 @@ public class AuthenticationController {
 		);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtProvider.generateToken(authentication);
-		return ResponseEntity.ok(new JwtResponse(jwt));
+
+		String role = authentication.getAuthorities().stream()
+				.map(item -> item.getAuthority())
+				.collect(Collectors.toList()).toString();
+		// CLEANING "[" and "]" from String.
+		role = role.substring(1);
+		role = role.substring(0,role.length() - 1 );
+		return ResponseEntity.ok(new JwtResponse(jwt, authentication.getName(), role));
 	}
-	
+	// THE USER CAN OPTIONALLY REGISTER WITH MULTIPLE ROLES 
+	// BUT SO FAR I ONLY ALLOW TO REGISTER WITH ROLE_USER, 
+	// MAYBE IN FUTURE I WILL RETURN AN ARRAY WITH ALL ROLES...
 	@PostMapping("/register")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest register) {
 		if (userService.existsByUsername(register.getUsername()))
@@ -72,12 +84,45 @@ public class AuthenticationController {
 				register.getEmail(),
 				passwordEncoder.encode(register.getPassword())
 		);
-		Role role = roleService.loadByRoleName((RoleName.ROLE_USER))
-				.orElseThrow(()-> new AppException("Role user was not set"));
-		user.setRoles(Collections.singleton(role));
+		Set<String> list_roles = register.getRole();
+		Set<Role> roles = new HashSet<>();
+		if (list_roles == null) {
+			Role user_role = roleService.loadByRoleName(RoleName.ROLE_USER)
+					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+			roles.add(user_role);
+		} else {
+			list_roles.forEach(role -> {
+				switch (role) {
+				case "user_vip":
+					Role user_vip_role = roleService.loadByRoleName(RoleName.ROLE_USER_VIP)
+							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+					roles.add(user_vip_role);
+
+					break;
+				case "admin":
+					Role admin_role = roleService.loadByRoleName(RoleName.ROLE_ADMIN)
+							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+					roles.add(admin_role);
+
+					break;
+				case "mod":
+					Role mod_role = roleService.loadByRoleName(RoleName.ROLE_MODERATOR)
+							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+					roles.add(mod_role);
+
+					break;
+				default:
+					Role user_role = roleService.loadByRoleName(RoleName.ROLE_USER)
+							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+					roles.add(user_role);
+				}
+			});
+		}
+		
+		user.setRoles(roles);
+		
 		userService.save(user);
-		// Will return a jwt token instead of message
-		//return new ResponseEntity(new ApiResponse(true, "You registered successefully !!!"), HttpStatus.CREATED);
+		
 		Authentication authentication = authManager.authenticate(
 			new UsernamePasswordAuthenticationToken(
 				register.getEmail(),
@@ -86,6 +131,12 @@ public class AuthenticationController {
 		);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtProvider.generateToken(authentication);
-		return new ResponseEntity(new JwtResponse(jwt), HttpStatus.CREATED);
+		List<String> user_roles = authentication.getAuthorities().stream()
+				.map(item -> item.getAuthority())
+				.collect(Collectors.toList());
+		// REMOVE THE NEXT TWO LINES BELLOW IF WANT TO SHOW AN ARRAY WITH USER ROLES INSTEAD OF A STRING...
+		StringBuilder strBul = new StringBuilder();
+		for(String str: user_roles) {if(str == "ROLE_USER")strBul.append("ROLE_USER");}
+		return new ResponseEntity(new JwtResponse(jwt, authentication.getName(), strBul.toString()), HttpStatus.CREATED);
 	}
 }
