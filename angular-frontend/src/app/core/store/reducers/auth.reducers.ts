@@ -39,6 +39,7 @@ export function reducer(state = initialState, action: AuthType): State {
         ...state,
         isAuthenticated: true,
         user: {
+          username: action.payload.username,
           email: action.payload.email,
           role: action.payload.role,
           token: action.payload.token

@@ -51,8 +51,11 @@ export class AuthEffects {
       ofType(AuthActionTypes.REGISTER),
       exhaustMap((action: Register) => {
         return this.authService.register(action.payload).pipe(
-          map((api: any) =>
-            new RegisterSuccess({ email: action.payload.email, role:action.payload.role, token: api.tokenType + " " + api.accessToken })
+          map((api: any) => {
+            //console.log(api)
+            return new RegisterSuccess({ username: api.username, email: action.payload.email, role: api.role, token: api.tokenType + " " + api.accessToken })
+          }
+
           ),
           catchError(error => of(new RegisterFailure({ errorMessage: error }))
           )
@@ -81,6 +84,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.LOGOUT),
     tap(()=> {
       localStorage.removeItem('token');
+      localStorage.removeItem('role');
       this.router.navigateByUrl('/');
     })
   );
