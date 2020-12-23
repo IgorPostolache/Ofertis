@@ -1,8 +1,11 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,17 +14,23 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table( name = "users",
@@ -29,7 +38,7 @@ import lombok.Setter;
 				@UniqueConstraint(columnNames = "username"),
 				@UniqueConstraint(columnNames = "email")
 		})
-@Getter @Setter @NoArgsConstructor @RequiredArgsConstructor
+@Getter @Setter @NoArgsConstructor @RequiredArgsConstructor 
 public class User extends DateAudit{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,4 +67,15 @@ public class User extends DateAudit{
 				inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 	
+	@OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<Service> services = new ArrayList<>();
+	
+	public void addService(Service service) {
+        services.add(service);
+        service.setUser(this);
+    }
 }

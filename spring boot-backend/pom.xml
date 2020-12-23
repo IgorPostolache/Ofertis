@@ -84,6 +84,13 @@
 	        <artifactId>lombok</artifactId>
 	        <scope>provided</scope>
 	    </dependency>
+	    
+	    <!-- Stripe -->
+	    <dependency>
+		  <groupId>com.stripe</groupId>
+		  <artifactId>stripe-java</artifactId>
+		  <version>20.33.0</version>
+		</dependency>
 		
 		</dependencies>
 

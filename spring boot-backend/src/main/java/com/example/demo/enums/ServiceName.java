@@ -1,0 +1,9 @@
+package com.example.demo.enums;
+
+public enum ServiceName {
+	TRY_IT_FREE_72HOURS,
+	ONE_MONTH_SUBSCRIPTION,
+	THREE_MONTHS_SUBSCRIPTION,
+	SIX_MONTHS_SUBSCRIPTION,
+	ONE_YEAR_SUBSCRIPTION
+}
