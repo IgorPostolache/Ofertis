@@ -9,6 +9,9 @@ import lombok.Setter;
 @Getter @Setter 
 public class CreateSubscriptionRequest {
 	@NotBlank
+	private String name;
+	
+	@NotBlank
 	@Email
 	private String email;
 	
@@ -18,5 +21,5 @@ public class CreateSubscriptionRequest {
 	@NotBlank
 	private String plan;
 	
-	private String cupon;
+	private String coupon;
 }

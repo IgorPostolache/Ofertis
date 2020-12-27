@@ -9,17 +9,25 @@ import { RegisterComponent } from './components/auth/register/register.component
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
+import { NgxStripeModule } from 'ngx-stripe';
 import { reducers } from './core/store/app.states';
+
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './core/store/effects/auth.effects';
+import { PaymentEffects } from './core/store/effects/payment.effects';
+import { ProfileEffects } from './core/store/effects/profile.effects';
+
 import { UserComponent } from './components/profiles/user/user.component';
 import { ModeratorComponent } from './components/profiles/moderator/moderator.component';
 import { AdminComponent } from './components/profiles/admin/admin.component';
 import { UserVipComponent } from './components/profiles/user-vip/user-vip.component';
 import { ProfileComponent } from './components/profiles/profile/profile.component';
+
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { AuthGuard } from './core/guards/auth.guard';
-import { ProfileEffects } from './core/store/effects/profile.effects';
+import { MillisToDatePipe } from './shared/misc/pipes/millis-to-date.pipe';
+
+
 
 
 @NgModule({
@@ -32,7 +40,8 @@ import { ProfileEffects } from './core/store/effects/profile.effects';
     ModeratorComponent,
     AdminComponent,
     UserVipComponent,
-    ProfileComponent
+    ProfileComponent,
+    MillisToDatePipe
   ],
   imports: [
     BrowserModule,
@@ -41,7 +50,8 @@ import { ProfileEffects } from './core/store/effects/profile.effects';
     ReactiveFormsModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {}),
-    EffectsModule.forRoot([AuthEffects, ProfileEffects])
+    EffectsModule.forRoot([AuthEffects, PaymentEffects, ProfileEffects]),
+    NgxStripeModule.forRoot('pk_test_51I1XH9KxGSTi9Lm0aA9ik8wjFfKL0oI4xR3iKg0z3BNmf0MGHp1WYnTYS7b0GMYRKFPf28TyFnYc0YtDleDyeDm100nIweVqz0')
   ],
   providers: [
     AuthGuard,

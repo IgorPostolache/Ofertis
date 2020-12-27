@@ -37,6 +37,7 @@ export class AuthEffects {
     tap((user) => {
       localStorage.setItem('token', user.payload.token);
       localStorage.setItem('role', user.payload.role);
+      localStorage.setItem('email', user.payload.email);
       this.router.navigateByUrl('/profile');
     })
   );
@@ -70,6 +71,7 @@ export class AuthEffects {
     tap((user) => {
       localStorage.setItem('token', user.payload.token);
       localStorage.setItem('role', user.payload.role);
+      localStorage.setItem('email', user.payload.email);
       this.router.navigateByUrl('/profile');
     })
   );
@@ -85,6 +87,7 @@ export class AuthEffects {
     tap(()=> {
       localStorage.removeItem('token');
       localStorage.removeItem('role');
+      localStorage.removeItem('email');
       this.router.navigateByUrl('/');
     })
   );

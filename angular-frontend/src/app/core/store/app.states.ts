@@ -1,6 +1,8 @@
 import { createFeatureSelector } from '@ngrx/store';
 import * as auth from './reducers/auth.reducers';
+import * as payment from './reducers/payment.reducers';
 import * as profile from './reducers/profile.reducers';
+
 
 export interface AppState {
   authState: auth.State;
@@ -8,8 +10,10 @@ export interface AppState {
 
 export const reducers = {
   auth: auth.reducer,
+  payment: payment.reducer,
   profile: profile.reducer
 }
 
 export const selectAuthState = createFeatureSelector<AppState>('auth');
+export const selectPaymentState = createFeatureSelector<AppState>('payment');
 export const selectProfileState = createFeatureSelector<AppState>('profile');
