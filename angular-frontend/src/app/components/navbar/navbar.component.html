@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-md bg-dark navbar-dark row justify-content-between">
+  <div class="col-auto">
+    <a class="navbar-brand d-inline-flex" href="#">Navbar</a>
+    <ul class="navbar-nav d-inline-flex">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="[/]">Home</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col-auto">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <!-- Dropdown PUBLIC -->
+      <li class="nav-item dropdown" *ngIf="!isAuthenticated">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+          Login/Register
+        </a>
+        <div class="dropdown-menu">
+          <a [routerLink]="['/login']" class="dropdown-item">Log in</a>
+          <a [routerLink]="['/register']" class="dropdown-item">Register</a>
+        </div>
+      </li>
+      <!-- Dropdown PRIVATE -->
+      <li class="nav-item dropdown" *ngIf="isAuthenticated">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+          {{ username }}
+        </a>
+        <div class="dropdown-menu">
+          <a [routerLink]="['/profile']" class="dropdown-item">My Profile</a>
+          <a [routerLink]="['*']" class="dropdown-item" (click)="logoutUser()">Log out</a>
+        </div>
+      </li>
+    </div>
+  </div>
+
+</nav>

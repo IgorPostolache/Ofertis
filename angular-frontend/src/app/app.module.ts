@@ -26,9 +26,7 @@ import { ProfileComponent } from './components/profiles/profile/profile.componen
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { AuthGuard } from './core/guards/auth.guard';
 import { MillisToDatePipe } from './shared/misc/pipes/millis-to-date.pipe';
-
-
-
+import { NavBarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +39,8 @@ import { MillisToDatePipe } from './shared/misc/pipes/millis-to-date.pipe';
     AdminComponent,
     UserVipComponent,
     ProfileComponent,
-    MillisToDatePipe
+    MillisToDatePipe,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
