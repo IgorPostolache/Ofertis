@@ -11,12 +11,10 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService, private router: Router, private _location: Location){}
   private handleAuthError(err: HttpErrorResponse): Observable<any> {
         if (err.status === 401) {
-            this.authService.deleteJWT();
             this.router.navigateByUrl(`/login`);
-            return of(err.message);
+            //return of(err.message); WILL IMPLEMENT THIS AT LATER POINT...
         }
         if (err.status === 403) {
-            console.log("NOT AUTHORIZED !!!");
             this._location.back();
             return of(err.message);
         }

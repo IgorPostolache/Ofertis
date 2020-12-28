@@ -44,7 +44,8 @@ export class AuthEffects {
 
   @Effect({ dispatch: false })
   loginFailure$: Observable<any> = this.action$.pipe(
-    ofType(AuthActionTypes.LOGIN_FAILURE)
+    ofType(AuthActionTypes.LOGIN_FAILURE),
+    //tap(err => console.log(err))
   );
 
   register$ = createEffect(() =>
