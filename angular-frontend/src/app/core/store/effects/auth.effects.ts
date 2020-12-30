@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { Actions, createEffect, Effect, ofType } from "@ngrx/effects";
 import { Observable, of } from "rxjs";
 import { map, exhaustMap, catchError, tap} from "rxjs/operators";
-import { AuthService } from "../../services/auth.service";
+import { AuthService } from "../../services/auth/auth.service";
 
 import { Login, AuthActionTypes, LoginFailure, LoginSuccess, Register, RegisterSuccess, RegisterFailure } from './../actions/auth.actions';
 

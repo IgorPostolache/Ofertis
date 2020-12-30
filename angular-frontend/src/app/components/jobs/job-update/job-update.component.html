@@ -1,0 +1,27 @@
+<div class="row justify-content-center">
+  <div class="col-6">
+    <h1 class="text-center">{{ action | titlecase }} Job</h1>
+    <hr><br>
+    <form (ngSubmit)="onSubmit(jobForm.value)" [formGroup]="jobForm">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" class="form-control" placeholder="Enter job's name" formControlName="name" required>
+      </div>
+      <div *ngIf="name.invalid && (name.dirty || name. touched)" class="alert alert-danger">
+        <div *ngIf="name.errors.required">
+          Name is requred.
+        </div>
+        <div *ngIf="name.errors.maxlength">
+          Name must not be longer than 20 characters long.
+        </div>
+      </div>
+      <input type="submit" class="btn btn-dark" value="{{ action | titlecase }}" [disabled]="jobForm.invalid || errorMessage">
+    </form>
+    <button class="btn btn-primary mt-3" (click)="goBack()">Go back</button>
+    <div class="alert alert-warning" *ngIf="errorMessage">
+      Failed to {{ action }}!
+      <br />
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>

@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { HomeComponent } from './components/home/home.component';
+import { JobUpdateComponent } from './components/jobs/job-update/job-update.component';
+import { JobComponent } from './components/jobs/job/job.component';
 import { AdminComponent } from './components/profiles/admin/admin.component';
 import { ModeratorComponent } from './components/profiles/moderator/moderator.component';
 import { ProfileComponent } from './components/profiles/profile/profile.component';
@@ -10,10 +12,14 @@ import { UserVipComponent } from './components/profiles/user-vip/user-vip.compon
 import { UserComponent } from './components/profiles/user/user.component';
 import { AuthGuard } from './core/guards/auth.guard';
 
-
-
 const routes: Routes = [
+
+  { path: 'jobs/job/:id', component: JobComponent},
+  { path: 'jobs/add', component: JobUpdateComponent},
+  { path: 'jobs/update/:id', component: JobUpdateComponent},
+
   { path: 'login', component: LoginComponent },
+
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard],
     children: [
       { path: 'user', component: UserComponent },
@@ -22,7 +28,9 @@ const routes: Routes = [
       { path: 'user_admin', component: AdminComponent },
     ]
   },
+
   { path: 'register', component: RegisterComponent },
+
   { path: '', component: HomeComponent },
   { path: '**', redirectTo: '/'}
 ];

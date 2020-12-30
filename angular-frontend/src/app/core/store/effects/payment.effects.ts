@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, Effect, ofType } from "@ngrx/effects";
 import { Observable, of } from "rxjs";
 import { catchError, exhaustMap, map, tap } from "rxjs/operators";
-import { PaymentService } from "../../services/payment.service";
+import { PaymentService } from "../../services/payment/payment.service";
 import { ListSubscriptions, ListSubscriptionsFailure, ListSubscriptionsSuccess, PaymentActionTypes, Subscribe, SubscribeFailure, SubscribeSuccess } from "../actions/payment.actions";
 
 @Injectable()

@@ -27,6 +27,10 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { AuthGuard } from './core/guards/auth.guard';
 import { MillisToDatePipe } from './shared/misc/pipes/millis-to-date.pipe';
 import { NavBarComponent } from './components/navbar/navbar.component';
+import { JobsComponent } from './components/jobs/jobs/jobs.component';
+import { JobComponent } from './components/jobs/job/job.component';
+import { JobUpdateComponent } from './components/jobs/job-update/job-update.component';
+import { JobEffects } from './core/store/effects/job.effects';
 
 @NgModule({
   declarations: [
@@ -40,7 +44,10 @@ import { NavBarComponent } from './components/navbar/navbar.component';
     UserVipComponent,
     ProfileComponent,
     MillisToDatePipe,
-    NavBarComponent
+    NavBarComponent,
+    JobsComponent,
+    JobComponent,
+    JobUpdateComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +56,7 @@ import { NavBarComponent } from './components/navbar/navbar.component';
     ReactiveFormsModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {}),
-    EffectsModule.forRoot([AuthEffects, PaymentEffects, ProfileEffects]),
+    EffectsModule.forRoot([AuthEffects, JobEffects, PaymentEffects, ProfileEffects]),
     NgxStripeModule.forRoot('pk_test_51I1XH9KxGSTi9Lm0aA9ik8wjFfKL0oI4xR3iKg0z3BNmf0MGHp1WYnTYS7b0GMYRKFPf28TyFnYc0YtDleDyeDm100nIweVqz0')
   ],
   providers: [

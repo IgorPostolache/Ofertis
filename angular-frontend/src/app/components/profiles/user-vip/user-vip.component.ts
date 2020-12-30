@@ -9,7 +9,7 @@ import { StripeService, StripeCardComponent } from 'ngx-stripe';
 import { StripeCardElementOptions, StripeElementsOptions } from '@stripe/stripe-js';
 import { Subscript } from 'src/app/shared/models/subscription/subscription';
 import { CancelSubscription, ListSubscriptions, Subscribe, SubscribeFailure } from 'src/app/core/store/actions/payment.actions';
-import { PaymentService } from 'src/app/core/services/payment.service';
+import { PaymentService } from 'src/app/core/services/payment/payment.service';
 
 @Component({
   selector: 'app-user-vip',

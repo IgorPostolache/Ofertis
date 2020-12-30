@@ -1,0 +1,8 @@
+<div class="row justify-content-center">
+  <div *ngIf="job" class="col-auto">
+    <h1>{{ job.name }}</h1>
+    <h4> {{ job.createdAt | date:'short'}}</h4>
+    <h4> {{ job.updatedAt | date:'short'}}</h4>
+    <button class="btn btn-primary" (click)="goBack()">Go back</button>
+  </div>
+</div>

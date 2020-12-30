@@ -34,7 +34,6 @@ public class JobController {
 	@Autowired
 	JwtProvider jwtProvider;
 	
-	
 	@GetMapping
 	public List<Job> getAllJobs() {
 		return jobService.loadAll();
@@ -47,29 +46,29 @@ public class JobController {
 	}
 	
 	@GetMapping("/user/{id}")
-	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public ResponseEntity<?> getAllUserJobs(@PathVariable Long id) {
 		List<Job> jobs = jobService.loadByUserId(id);
 		return ResponseEntity.ok(jobs);
 	}
 	
-	@PostMapping("/add")
+	@PostMapping
 	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public ResponseEntity<?> addJob(@Valid @RequestBody Job job, HttpServletRequest req) {
 		User user = jwtProvider.getUserFromAuthorizationHeader(req);
 		job.setUser(user);
 		jobService.save(job);
-		return new ResponseEntity(new ApiResponse(true, "Job was created."), HttpStatus.CREATED);
+		return new ResponseEntity(job, HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping
 	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
-	public ResponseEntity<?> updateJob(@PathVariable Long id, @Valid @RequestBody Job jobReq) {
-		Job job = jobService.loadById(id).orElseThrow(
-				() -> new BadRequestException("No job found by id " + id));
+	public ResponseEntity<?> updateJob(@Valid @RequestBody Job jobReq) {
+		if (jobReq.getId() == null) return new ResponseEntity(new BadRequestException("Job id must be provided"), HttpStatus.BAD_REQUEST);
+		Job job = jobService.loadById(jobReq.getId()).orElseThrow(
+				() -> new BadRequestException("No job found by id " + jobReq.getId()));
 		job.setName(jobReq.getName());
 		jobService.save(job);
-		return ResponseEntity.ok("Job was updated.");
+		return ResponseEntity.ok(job);
 	}
 	
 	@DeleteMapping("/{id}")
@@ -78,7 +77,7 @@ public class JobController {
 		Job job = jobService.loadById(id).orElseThrow(
 				() -> new BadRequestException("No job found by id " + id));
 		jobService.delete(job);
-		return ResponseEntity.ok("Job was deleted.");
+		return ResponseEntity.ok(new ApiResponse(true, "Job was deleted."));
 	}
 	
 }

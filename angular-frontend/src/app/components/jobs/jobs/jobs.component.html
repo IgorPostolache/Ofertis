@@ -1,0 +1,29 @@
+<a routerLink="/jobs/add" class="btn btn-warning">Add Job</a>
+<br>
+<div  *ngIf="jobs.length > 0">
+  <h1>Jobs</h1>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Posted</th>
+        <th class="text-center">Acctions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let job of jobs">
+        <td>
+          <a routerLink="/jobs/job/{{ job.id }}">{{ job.name }}</a>
+        </td>
+        <td>{{ job.createdAt | date:'short'}}</td>
+        <td>
+          <a routerLink="/jobs/update/{{ job.id }}" class="btn btn-warning">Update</a>
+          ||
+          <button class="btn btn-danger" (click)="onDelete(job.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+

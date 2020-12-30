@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { AuthService } from 'src/app/core/services/auth.service';
 import { UserModeratorProfile } from 'src/app/core/store/actions/profile.actions';
 import { AppState, selectProfileState } from 'src/app/core/store/app.states';
 
@@ -13,6 +12,7 @@ import { AppState, selectProfileState } from 'src/app/core/store/app.states';
 export class ModeratorComponent implements OnInit {
   moderator_content: string | null;
   getProfile$: Observable<any>;
+
   constructor(private _store: Store<AppState>) {
     this.getProfile$ = this._store.select(selectProfileState);
    }

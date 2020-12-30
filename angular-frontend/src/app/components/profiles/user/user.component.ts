@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { AuthService } from 'src/app/core/services/auth.service';
 import { UserProfile } from 'src/app/core/store/actions/profile.actions';
 import { AppState, selectProfileState } from 'src/app/core/store/app.states';
 
