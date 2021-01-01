@@ -1,31 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { Register } from 'src/app/core/store/actions/auth.actions';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { register } from 'src/app/core/store/actions/auth.actions';
 import { AppState, selectAuthState } from 'src/app/core/store/app.states';
 import { checkPasswordStrength } from 'src/app/shared/misc/functions/checkPasswordStrength';
 import { User } from 'src/app/shared/models/user/user';
-
-
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
-  user: User = new User();
+export class RegisterComponent implements OnInit, OnDestroy {
+  private destroy: Subject<boolean> = new Subject<boolean>();
+  errorMessage: string;
   registerForm: FormGroup;
-  getState: Observable<any>;
-  errorMessage: string | null;
+  user: User = new User();
 
-  constructor(private _store: Store<AppState>) {
-    this.getState = this._store.select(selectAuthState);
-   }
+  constructor(private _store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.getState.subscribe((state) =>
+    this._store.select(selectAuthState).pipe(takeUntil(this.destroy)).subscribe((state: any) =>
       this.errorMessage = state.errorMessage
     );
     this.registerForm = new FormGroup({
@@ -65,6 +62,11 @@ export class RegisterComponent implements OnInit {
 
   }
 
+  ngOnDestroy(): void {
+    this.destroy.next(true);
+    this.destroy.unsubscribe();
+  }
+
   private customPasswordValidator(form: FormGroup) {
     return form.get('password').value === form.get('confirmPsw').value ? null : {'mismatch': true};
   }
@@ -82,6 +84,6 @@ export class RegisterComponent implements OnInit {
     this.user.email = formvalue.email;
     this.user.password = formvalue.password;
 
-    this._store.dispatch(new Register(Object.assign({},this.user)));
+    this._store.dispatch(register(Object.assign({},this.user)));
   }
 }

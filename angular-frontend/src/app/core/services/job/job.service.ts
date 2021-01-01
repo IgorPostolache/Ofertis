@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Job } from 'src/app/shared/models/job/job';
+import { Job } from 'src/app/shared/models/job/job.model';
 
 const JOB_API = 'http://localhost:8080/api/jobs/';
 const httpOptions = {
@@ -15,7 +15,7 @@ export class JobService {
 
   constructor(private http: HttpClient) { }
 
-  addJob(job: Job): Observable<any> {
+  addJob(job: Job): Observable<Job> {
     return this.http.post<Job>(JOB_API, job, httpOptions);
   }
   deleteJob(id: string): Observable<any> {

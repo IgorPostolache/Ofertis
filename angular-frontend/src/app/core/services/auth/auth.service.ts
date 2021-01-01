@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/shared/models/user/user';
 
-
 const AUTH_API = 'http://localhost:8080/api/auth/';
 const PROFILE_API = 'http://localhost:8080/api/profile/';
 const httpOptions = {
@@ -18,12 +17,11 @@ export class AuthService {
 
   login(user: User): Observable<any> {
     const url = AUTH_API + 'login';
-    return this.http.post<User>(url,{email: user.email, password: user.password}, httpOptions);
+    return this.http.post<User>(url, user, httpOptions);
   }
   register(user: User): Observable<User> {
     const url = AUTH_API + 'register';
-    return this.http.post<User>(url, {
-      name: user.name, username: user.username, email: user.email, password: user.password}, httpOptions);
+    return this.http.post<User>(url, user, httpOptions);
   }
   getJWT(): string {
     return localStorage.getItem('token');

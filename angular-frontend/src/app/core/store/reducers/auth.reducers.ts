@@ -1,63 +1,47 @@
+import { createReducer, on, Action } from "@ngrx/store";
 import { User } from "src/app/shared/models/user/user";
-import { AuthType, AuthActionTypes } from "../actions/auth.actions";
+import * as authActions from "../actions/auth.actions";
 
-export interface State {
+export const authFeatureName = 'auth';
+
+export interface AuthState {
   isAuthenticated: boolean;
-  user: User | null;
-  errorMessage: string | null;
+  user: User;
+  errorMessage: string;
 }
 
-export const initialState: State = {
+export const initialAuthState: AuthState = {
   isAuthenticated: false,
   user: null,
   errorMessage: null
 }
 
-export function reducer(state = initialState, action: AuthType): State {
-  switch(action.type) {
-    case AuthActionTypes.LOGIN_SUCCESS:
-      return {
-        ...state,
-        isAuthenticated: true,
-        user: {
-          username: action.payload.username,
-          email: action.payload.email,
-          role: action.payload.role,
-          token: action.payload.token
-        },
-        errorMessage: null
-      }
-    case AuthActionTypes.LOGIN_FAILURE:
-      return {
-        ...state,
-        errorMessage: action.payload.errorMessage
-      }
-    case AuthActionTypes.LOGOUT:
-      return initialState;
-    case AuthActionTypes.REGISTER_SUCCESS:
-      return {
-        ...state,
-        isAuthenticated: true,
-        user: {
-          username: action.payload.username,
-          email: action.payload.email,
-          role: action.payload.role,
-          token: action.payload.token
-        },
-        errorMessage: null
-      }
-    case AuthActionTypes.REGISTER_FAILURE:
-      return {
-        ...state,
-        errorMessage: action.payload.errorMessage.error.message
-      }
-    case AuthActionTypes.PROFILE_ALL:
-      return {
-        ...state,
-        errorMessage: action.payload
-      }
-    default: {
-      return state;
+const authReducerInternal = createReducer(
+  initialAuthState,
+  on(authActions.loginSuccess, (state, user) => {
+    return {
+      ...state,
+      user,
+      isAuthenticated: true
     }
-  }
+  }),
+  on(authActions.loginFailure, (state, {errorMessage})=> {
+    return {
+      ...state,
+      errorMessage
+    }
+  }),
+  on(authActions.logout, state => { return {...state, user: null, isAuthenticated: false}}),
+  on(authActions.registerSuccess, (state, user) => {
+    return {
+      ...state,
+      user,
+      isAuthenticated: true
+    }
+  }),
+  on(authActions.registerFailure, (state, {errorMessage}) => { return {...state, errorMessage }})
+);
+
+export function authReducer(state: AuthState | undefined, action: Action) {
+  return authReducerInternal(state, action);
 }

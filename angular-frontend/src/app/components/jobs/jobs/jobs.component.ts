@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import { JobService } from 'src/app/core/services/job/job.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DeleteJob, GetJobs } from 'src/app/core/store/actions/job.actions';
 import { AppState, selectJobState } from 'src/app/core/store/app.states';
 import { Job } from 'src/app/shared/models/job/job';
@@ -12,23 +12,20 @@ import { Job } from 'src/app/shared/models/job/job';
   styleUrls: ['./jobs.component.css']
 })
 export class JobsComponent implements OnInit, OnDestroy {
+  private destroy: Subject<boolean> = new Subject<boolean>();
   jobs: Job[] = [];
-  getJobState$: Observable<any>;
-  subscriptions = new Subscription();
 
-  constructor(private _store: Store<AppState>) {
-    this.getJobState$ = this._store.select(selectJobState);
-  }
+  constructor(private _store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.subscriptions.add(
-      this.getJobState$.subscribe(data => this.jobs = data.jobs ? data.jobs : [])
-    );
+    this._store.select(selectJobState).pipe(takeUntil(this.destroy))
+      .subscribe((data: any) => this.jobs = data.jobs ? data.jobs : []);
     if (this.jobs.length == 0) this._store.dispatch(new GetJobs());
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.destroy.next(true);
+    this.destroy.unsubscribe();
   }
 
   onDelete(id: string): void {

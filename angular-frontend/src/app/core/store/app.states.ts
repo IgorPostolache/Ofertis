@@ -6,11 +6,11 @@ import * as profile from './reducers/profile.reducers';
 
 
 export interface AppState {
-  authState: auth.State;
+  authState: auth.AuthState;
 }
 
 export const reducers = {
-  auth: auth.reducer,
+  auth: auth.authReducer,
   job: job.reducer,
   payment: payment.reducer,
   profile: profile.reducer

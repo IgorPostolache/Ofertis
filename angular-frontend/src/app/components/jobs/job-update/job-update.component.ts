@@ -13,8 +13,8 @@ import { Location } from '@angular/common';
   styleUrls: ['./job-update.component.css']
 })
 export class JobUpdateComponent implements OnInit {
-  action: string | null;
-  errorMessage: string | null;
+  action: string;
+  errorMessage: string;
   job: Job = new Job();
   jobForm: FormGroup;
   id: number;
