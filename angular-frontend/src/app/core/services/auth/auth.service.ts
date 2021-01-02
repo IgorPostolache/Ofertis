@@ -33,18 +33,18 @@ export class AuthService {
     return localStorage.getItem('role')
   }
   getAllProfile(): Observable<any> {
-    return this.http.get(PROFILE_API + "all", {responseType: 'text'});
+    return this.http.get(PROFILE_API + "all");
   }
   getUserProfile(): Observable<any> {
-    return this.http.get(PROFILE_API + "user", {responseType: 'text'});
+    return this.http.get(PROFILE_API + "user");
   }
   getUserVipProfile(): Observable<any> {
-    return this.http.get(PROFILE_API + "user_vip", {responseType: 'text'});
+    return this.http.get(PROFILE_API + "user_vip");
   }
   getUserModeratorProfile(): Observable<any> {
-    return this.http.get(PROFILE_API + "user_moderator", {responseType: 'text'});
+    return this.http.get(PROFILE_API + "user_moderator");
   }
   getUserAdminProfile(): Observable<any> {
-    return this.http.get(PROFILE_API + "user_admin", {responseType: 'text'});
+    return this.http.get(PROFILE_API + "user_admin");
   }
 }

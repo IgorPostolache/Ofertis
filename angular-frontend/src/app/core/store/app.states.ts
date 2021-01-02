@@ -13,7 +13,7 @@ export const reducers = {
   auth: auth.authReducer,
   job: job.reducer,
   payment: payment.reducer,
-  profile: profile.reducer
+  profile: profile.profileReducer
 }
 
 export const selectAuthState = createFeatureSelector<AppState>('auth');

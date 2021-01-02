@@ -1,25 +1,31 @@
-import { ProfileActionTypes, ProfileType } from "../actions/profile.actions";
+import { createReducer, on, Action } from "@ngrx/store";
+import * as profileActions from "../actions/profile.actions";
 
-export interface State {
-  content: string | null;
+export const profileFeatureName = 'profile';
+
+export interface ProfileState {
+  content: string;
+  errorMessage: string;
 }
 
-export const initialState: State ={
-  content: null
+export const initialProfileState: ProfileState ={
+  content: null,
+  errorMessage: null
 }
 
-export function reducer(state = initialState, action: ProfileType): State {
-  switch(action.type) {
-    case ProfileActionTypes.ADMIN:
-    case ProfileActionTypes.MODERATOR:
-    case ProfileActionTypes.USER:
-    case ProfileActionTypes.USER_VIP:
-      return {
-        ...state,
-        content: action.payload.content
-      }
-    case ProfileActionTypes.REDIRECT_PROFILE:
-    default:
-      return state;
-  }
+const ProfileReducerInternal = createReducer(
+  initialProfileState,
+  on(profileActions.adminProfileSuccess, (state, {content}) => ({...state, content})),
+  on(profileActions.adminProfileFailure, (state, {errorMessage}) => ({...state, errorMessage})),
+  on(profileActions.moderatorProfileSuccess, (state, {content}) => ({...state, content})),
+  on(profileActions.moderatorProfileFailure, (state, {errorMessage}) => ({...state, errorMessage})),
+  on(profileActions.userProfileSuccess, (state, {content}) => ({...state, content})),
+  on(profileActions.userProfileFailure, (state, {errorMessage}) => ({...state, errorMessage})),
+  on(profileActions.userVipProfileSuccess, (state, {content}) => ({...state, content})),
+  on(profileActions.userVipProfileFailure, (state, {errorMessage}) => ({...state, errorMessage})),
+  on(profileActions.redirectProfile, state => state)
+);
+
+export function profileReducer(state: ProfileState | undefined, action: Action) {
+  return ProfileReducerInternal(state, action);
 }

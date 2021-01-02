@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { RedirectProfile } from 'src/app/core/store/actions/profile.actions';
+import { redirectProfile } from 'src/app/core/store/actions/profile.actions';
 import { AppState } from 'src/app/core/store/app.states';
 
 @Component({
@@ -13,7 +13,7 @@ export class ProfileComponent implements OnInit {
   constructor(private _store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this._store.dispatch(new RedirectProfile);
+    this._store.dispatch(redirectProfile());
   }
 
 }

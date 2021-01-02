@@ -1,37 +1,48 @@
-import { Action } from "@ngrx/store";
+import { createAction, props } from "@ngrx/store";
 
-export enum ProfileActionTypes {
-  ADMIN = '[Profile] Get admin content.',
-  GENERAL = '[Profile] Get general content.',
-  MODERATOR = '[Profile] Get moderator content.',
-  USER = '[Profile] Get user content.',
-  USER_VIP = '[Profile] Get user_vip content.',
-  REDIRECT_PROFILE = '[Profile] Redirect user to his profile'
-}
-export class UserProfile implements Action {
-  readonly type = ProfileActionTypes.USER;
-  constructor(public payload: any){}
-}
-export class UserVipProfile implements Action {
-  readonly type = ProfileActionTypes.USER_VIP;
-  constructor(public payload: any){}
-}
-export class UserAdminProfile implements Action {
-  readonly type = ProfileActionTypes.ADMIN;
-  constructor(public payload: any){}
-}
-export class UserModeratorProfile implements Action {
-  readonly type = ProfileActionTypes.MODERATOR;
-  constructor(public payload: any){}
-}
+export const adminProfile = createAction(
+  '[Profile] Get admin content.'
+);
+export const adminProfileSuccess = createAction(
+  '[Profile] Get admin content success.',
+  props<{content: string}>()
+);
+export const adminProfileFailure = createAction(
+  '[Profile] Get admin content failure.',
+  props<{errorMessage: string}>()
+);
+export const moderatorProfile = createAction(
+  '[Profile] Get moderator content.'
+);
+export const moderatorProfileSuccess = createAction(
+  '[Profile] Get moderator content success.',
+  props<{content: string}>()
+);
+export const moderatorProfileFailure = createAction(
+  '[Profile] Get moderator content failure.',
+  props<{errorMessage: string}>()
+);
+export const userProfile = createAction(
+  '[Profile] Get user content.'
+);
+export const userProfileSuccess = createAction(
+  '[Profile] Get user content success.',
+  props<{content: string}>()
+);
+export const userProfileFailure = createAction(
+  '[Profile] Get user content failure.',
+  props<{errorMessage: string}>()
+);
+export const userVipProfile = createAction(
+  '[Profile] Get user vip content.'
+);
+export const userVipProfileSuccess = createAction(
+  '[Profile] Get user vip content success.',
+  props<{content: string}>()
+);
+export const userVipProfileFailure = createAction(
+  '[Profile] Get user vip content failure.',
+  props<{errorMessage: string}>()
+);
+export const redirectProfile = createAction('[Profile] Redirect user to his profile');
 
-export class RedirectProfile implements Action {
-  readonly type = ProfileActionTypes.REDIRECT_PROFILE;
-}
-
-export type ProfileType =
-  | UserProfile
-  | UserVipProfile
-  | UserAdminProfile
-  | UserModeratorProfile
-  | RedirectProfile

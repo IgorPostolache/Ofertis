@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, Effect, ofType } from "@ngrx/effects";
-import { Observable } from "rxjs";
-import { exhaustMap, map, tap } from "rxjs/operators";
+import { Observable, of } from "rxjs";
+import { catchError, exhaustMap, map, tap } from "rxjs/operators";
 import { AuthService } from "../../services/auth/auth.service";
-import { ProfileActionTypes, UserAdminProfile, UserModeratorProfile, UserProfile, UserVipProfile } from "../actions/profile.actions";
+import { adminProfile, adminProfileFailure, adminProfileSuccess, moderatorProfile, moderatorProfileFailure, moderatorProfileSuccess, redirectProfile, userProfile, userProfileFailure, userProfileSuccess, userVipProfile, userVipProfileFailure, userVipProfileSuccess } from "../actions/profile.actions";
 
 @Injectable()
 export class ProfileEffects {
@@ -16,13 +16,11 @@ export class ProfileEffects {
 
   profileUser$ = createEffect(() =>
     this.action$.pipe(
-      ofType(ProfileActionTypes.USER),
-      exhaustMap(action =>
+      ofType(userProfile),
+      exhaustMap(() =>
         this.authService.getUserProfile().pipe(
-          map(content => {
-            return new UserProfile({content})
-            }
-          )
+          map(res => userProfileSuccess({content: res.message})),
+          catchError(err => of(userProfileFailure({errorMessage: err.error.message})))
         )
       )
     )
@@ -30,13 +28,11 @@ export class ProfileEffects {
 
   profileUserVip$ = createEffect(() =>
     this.action$.pipe(
-      ofType(ProfileActionTypes.USER_VIP),
-      exhaustMap(action =>
+      ofType(userVipProfile),
+      exhaustMap(() =>
         this.authService.getUserVipProfile().pipe(
-          map(content => {
-            return new UserVipProfile({content})
-            }
-          )
+          map(res => userVipProfileSuccess({ content: res.message })),
+          catchError(err => of(userVipProfileFailure({ errorMessage: err.error.message })))
         )
       )
     )
@@ -44,13 +40,11 @@ export class ProfileEffects {
 
   profileUserModerator$ = createEffect(() =>
     this.action$.pipe(
-      ofType(ProfileActionTypes.MODERATOR),
-      exhaustMap(action =>
+      ofType(moderatorProfile),
+      exhaustMap(() =>
         this.authService.getUserModeratorProfile().pipe(
-          map(content => {
-            return new UserModeratorProfile({content})
-            }
-          )
+          map(res => moderatorProfileSuccess({content: res.message})),
+          catchError(err => of(moderatorProfileFailure({errorMessage: err.error.message})))
         )
       )
     )
@@ -58,13 +52,11 @@ export class ProfileEffects {
 
   profileUserAdmin$ = createEffect(() =>
     this.action$.pipe(
-      ofType(ProfileActionTypes.ADMIN),
-      exhaustMap(action =>
+      ofType(adminProfile),
+      exhaustMap(() =>
         this.authService.getUserAdminProfile().pipe(
-          map(content => {
-            return new UserAdminProfile({content})
-            }
-          )
+          map(res => adminProfileSuccess({content: res.message})),
+          catchError(err => of(adminProfileFailure({errorMessage: err.error.message})))
         )
       )
     )
@@ -72,7 +64,7 @@ export class ProfileEffects {
   // THIS METHOD NEEDS TO BE CHANGED IF IN FUTURE I WILL WANT A USER WITH VARIOUS ROLES TO ENTER ALL PROFILES
   @Effect({ dispatch: false })
   redirectProfile$: Observable<any> = this.action$.pipe(
-    ofType(ProfileActionTypes.REDIRECT_PROFILE),
+    ofType(redirectProfile),
     tap(()=> {
       let user_role = this.authService.getUserRole();
 

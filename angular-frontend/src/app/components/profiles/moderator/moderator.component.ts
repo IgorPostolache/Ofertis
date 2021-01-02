@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { UserModeratorProfile } from 'src/app/core/store/actions/profile.actions';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { moderatorProfile } from 'src/app/core/store/actions/profile.actions';
 import { AppState, selectProfileState } from 'src/app/core/store/app.states';
 
 @Component({
@@ -9,17 +10,24 @@ import { AppState, selectProfileState } from 'src/app/core/store/app.states';
   templateUrl: './moderator.component.html',
   styleUrls: ['./moderator.component.css']
 })
-export class ModeratorComponent implements OnInit {
-  moderator_content: string | null;
-  getProfile$: Observable<any>;
+export class ModeratorComponent implements OnInit, OnDestroy {
+  private destroy: Subject<boolean> = new Subject<boolean>();
+  errorMessage: string;
+  moderator_content: string;
 
-  constructor(private _store: Store<AppState>) {
-    this.getProfile$ = this._store.select(selectProfileState);
-   }
+  constructor(private _store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this._store.dispatch(new UserModeratorProfile(''));
-    this.getProfile$.subscribe(data => this.moderator_content = data.content);
+    this._store.dispatch(moderatorProfile());
+    this._store.select(selectProfileState).pipe(takeUntil(this.destroy))
+      .subscribe(
+        (data: any) => this.moderator_content = data.content),
+        err => this.errorMessage = err.errorMessage;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next(true);
+    this.destroy.unsubscribe();
   }
 
 }

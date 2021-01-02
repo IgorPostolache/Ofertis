@@ -1,15 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChild  } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import { UserVipProfile } from 'src/app/core/store/actions/profile.actions';
+import { Subject } from 'rxjs';
+import { userVipProfile } from 'src/app/core/store/actions/profile.actions';
 import { AppState, selectPaymentState, selectProfileState } from 'src/app/core/store/app.states';
-
 import { StripeService, StripeCardComponent } from 'ngx-stripe';
 import { StripeCardElementOptions, StripeElementsOptions } from '@stripe/stripe-js';
 import { Subscript } from 'src/app/shared/models/subscription/subscription';
 import { CancelSubscription, ListSubscriptions, Subscribe, SubscribeFailure } from 'src/app/core/store/actions/payment.actions';
 import { PaymentService } from 'src/app/core/services/payment/payment.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-vip',
@@ -21,20 +21,15 @@ export class UserVipComponent implements OnInit, OnDestroy {
     private _store: Store<AppState>,
     private stripeService: StripeService,
     private paymetSvc: PaymentService
-    ) {
-      this.getProfile$ = this._store.select(selectProfileState);
-      this.getSubscription$ = this._store.select(selectPaymentState);
-    }
+    ) {}
 
-  user_vip: string | null;
-  getProfile$: Observable<any>;
-  getSubscription$: Observable<any>;
-  getAuth$: Observable<any>;
-  errorMessage: string | null;
-  subscription: Subscript = new Subscript();
-  subscriptions = new Subscription();
+  private destroy: Subject<boolean> = new Subject<boolean>();
+  errorMessage: string;
+  stripeTest: FormGroup;
   subList: any = [];
+  subscription: Subscript = new Subscript();
   token: string;
+  user_vip: string;
 
   @ViewChild(StripeCardComponent) card: StripeCardComponent;
   cardOptions: StripeCardElementOptions = {
@@ -54,21 +49,28 @@ export class UserVipComponent implements OnInit, OnDestroy {
   elementsOptions: StripeElementsOptions = {
     locale: 'en',
   };
-  stripeTest: FormGroup;
+
   get name() { return this.stripeTest.get('name'); }
 
   ngOnInit(): void {
-    this._store.dispatch(new UserVipProfile(''));
+    this._store.dispatch(userVipProfile());
 
-    this.subscriptions.add(this.getProfile$.subscribe(data => this.user_vip = data.content));
+    this._store.select(selectProfileState).pipe(takeUntil(this.destroy))
+      .subscribe(
+        (data: any) => this.user_vip = data.content),
+        err => this.errorMessage = err.errorMessage;
 
-    this.subscriptions.add(this.getSubscription$.subscribe(data => {
-      this.subscription.customer_id = data.customer_id;
-      this.subscription.subscription_id = data.subscription_id;
-      this.subscription.subscription_message = data.subscription_message;
-      this.subscription.subscription_name = data.subscription_name;
-      this.subList = data.subscriptions;
-    }));
+    this._store.select(selectPaymentState).pipe(takeUntil(this.destroy))
+      .subscribe(
+        (data: any) => {
+          this.subscription.customer_id = data.customer_id;
+          this.subscription.subscription_id = data.subscription_id;
+          this.subscription.subscription_message = data.subscription_message;
+          this.subscription.subscription_name = data.subscription_name;
+          this.subList = data.subscriptions;
+        },
+        err => this.errorMessage = err.errorMessage
+      );
 
     this.stripeTest = new FormGroup({
       'plan': new FormControl(null, Validators.required),
@@ -81,7 +83,8 @@ export class UserVipComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.destroy.next(true);
+    this.destroy.unsubscribe();
   }
 
   onSubmit({ name, plan}): void {
@@ -89,20 +92,24 @@ export class UserVipComponent implements OnInit, OnDestroy {
   }
 
   createToken(name, plan): void {
-    this.subscriptions.add(this.stripeService
+
+    this.stripeService
       .createToken(this.card.element, { name })
-      .subscribe((result) => {
-        if (result.token) {
+      .pipe(takeUntil(this.destroy))
+      .subscribe((data) => {
+        if (data.token) {
           this._store.dispatch(new Subscribe({
             "name": name,
             "email": localStorage.getItem("email"),
-            "token": result.token.id,
+            "token": data.token.id,
             "plan": plan
           }))
-        } else if (result.error) {
-          this._store.dispatch(new SubscribeFailure(result.error.message));
+        } else if (data.error) {
+          this._store.dispatch(new SubscribeFailure(data.error.message));
         }
-      }));
+      },
+      err => this.errorMessage = err.errorMessage
+      );
   }
 
   showSubs(): void {
@@ -111,7 +118,7 @@ export class UserVipComponent implements OnInit, OnDestroy {
 
   cancelSub(id): void {
     if(confirm("Are you sure that you want to cancel this subscription?")) {
-      this.subscriptions.add(this.paymetSvc.cancelSub({id: id}).subscribe());
+      this.paymetSvc.cancelSub({id: id}).pipe(takeUntil(this.destroy)).subscribe();
       this._store.dispatch(new CancelSubscription({}));
     }
   }
