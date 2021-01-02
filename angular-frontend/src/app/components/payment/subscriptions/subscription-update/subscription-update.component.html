@@ -1,0 +1,73 @@
+<div class="row justify-content-center">
+  <div class="col-6">
+    <h1>Chose a Subscription</h1>
+    <br>
+    <form (ngSubmit)="onSubmit(stripeTest.value)" [formGroup]="stripeTest">
+      <div class="form-group">
+
+        <label for="plan" class="row">
+          <div class="col-auto">
+            <input formControlName="plan" type="radio" required id="plan" value="price_1I1YOuKxGSTi9Lm0jKzVg6vY">
+            One month for 30€
+          </div>
+        </label>
+        <br>
+        <hr>
+
+        <label for="plan3" class="row justify-content-between">
+          <div class="col-auto">
+            <input formControlName="plan" type="radio" required id="trimester" value="price_1I2EhPKxGSTi9Lm0kQNLlwe3">
+            Three months for 75€
+          </div>
+          <div class="bg-dark text-white col-auto">16,67 % Cheaper</div>
+        </label>
+        <br>
+        <hr>
+
+        <label for="semester" class="row justify-content-between">
+          <div class="col-auto">
+            <input formControlName="plan" type="radio" required id="semester" value="price_1I2EhPKxGSTi9Lm0yKcrwst2">
+            Six months for 125€
+          </div>
+          <div class="bg-warning text-white col-auto">30,56 % Cheaper</div>
+        </label>
+        <br>
+        <hr>
+
+        <label for="year" class="row justify-content-between">
+          <div class="col-auto">
+            <input formControlName="plan" type="radio" required id="year" value="price_1I2EhQKxGSTi9Lm0dLi6OZEn">
+            One year for 200€
+          </div>
+          <div class="bg-danger text-white col-auto">44,44 % Cheaper</div>
+        </label>
+      </div>
+      <br>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input name="name" type="text" required class="form-control" id="name" placeholder="Enter your name..."
+          formControlName="name">
+        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+          <div *ngIf="name.errors.required">
+            Name is required.
+          </div>
+          <div *ngIf="name.errors.maxlength">
+            Name must not be longer then 40 characters long.
+          </div>
+          <div *ngIf="name.errors.minlength">
+            Name must be longer then 4 characters long.
+          </div>
+        </div>
+      </div>
+      <br>
+      <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"
+        (change)="errorMessage = $event.error ? $event.error.message : null"></ngx-stripe-card>
+      <div class="alert alert-warning" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+      <br>
+      <button type="submit" class="btn btn-primary" [disabled]="stripeTest.invalid || errorMessage">Subscribe</button>
+      <a [routerLink]="['/']" class="btn btn-success ml-3">Cancel</a>
+    </form>
+  </div>
+</div>

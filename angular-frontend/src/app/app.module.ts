@@ -31,6 +31,9 @@ import { JobsComponent } from './components/jobs/jobs/jobs.component';
 import { JobComponent } from './components/jobs/job/job.component';
 import { JobUpdateComponent } from './components/jobs/job-update/job-update.component';
 import { JobEffects } from './core/store/effects/job.effects';
+import { SubscriptionUpdateComponent } from './components/payment/subscriptions/subscription-update/subscription-update.component';
+import { SubscriptionsListComponent } from './components/payment/subscriptions/subscriptions-list/subscriptions-list.component';
+import { SubscriptionsComponent } from './components/payment/subscriptions/subscriptions.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,10 @@ import { JobEffects } from './core/store/effects/job.effects';
     NavBarComponent,
     JobsComponent,
     JobComponent,
-    JobUpdateComponent
+    JobUpdateComponent,
+    SubscriptionUpdateComponent,
+    SubscriptionsListComponent,
+    SubscriptionsComponent
   ],
   imports: [
     BrowserModule,
