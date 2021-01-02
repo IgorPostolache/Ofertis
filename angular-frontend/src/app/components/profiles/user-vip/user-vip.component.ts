@@ -6,10 +6,10 @@ import { userVipProfile } from 'src/app/core/store/actions/profile.actions';
 import { AppState, selectPaymentState, selectProfileState } from 'src/app/core/store/app.states';
 import { StripeService, StripeCardComponent } from 'ngx-stripe';
 import { StripeCardElementOptions, StripeElementsOptions } from '@stripe/stripe-js';
-import { Subscript } from 'src/app/shared/models/subscription/subscription';
-import { CancelSubscription, ListSubscriptions, Subscribe, SubscribeFailure } from 'src/app/core/store/actions/payment.actions';
+import { cancelSubStripe, getStripeSubs, subscribeStripe, subscribeStripeFailure } from 'src/app/core/store/actions/payment.actions';
 import { PaymentService } from 'src/app/core/services/payment/payment.service';
 import { takeUntil } from 'rxjs/operators';
+import { CustomerSub } from 'src/app/shared/models/customer/customer';
 
 @Component({
   selector: 'app-user-vip',
@@ -22,12 +22,11 @@ export class UserVipComponent implements OnInit, OnDestroy {
     private stripeService: StripeService,
     private paymetSvc: PaymentService
     ) {}
-
+  customerSub: CustomerSub = new CustomerSub();
   private destroy: Subject<boolean> = new Subject<boolean>();
   errorMessage: string;
   stripeTest: FormGroup;
   subList: any = [];
-  subscription: Subscript = new Subscript();
   token: string;
   user_vip: string;
 
@@ -63,10 +62,10 @@ export class UserVipComponent implements OnInit, OnDestroy {
     this._store.select(selectPaymentState).pipe(takeUntil(this.destroy))
       .subscribe(
         (data: any) => {
-          this.subscription.customer_id = data.customer_id;
-          this.subscription.subscription_id = data.subscription_id;
-          this.subscription.subscription_message = data.subscription_message;
-          this.subscription.subscription_name = data.subscription_name;
+          this.customerSub.customer_id = data.customer_id;
+          this.customerSub.subscription_id = data.subscription_id;
+          this.customerSub.subscription_message = data.subscription_message;
+          this.customerSub.subscription_name = data.subscription_name;
           this.subList = data.subscriptions;
         },
         err => this.errorMessage = err.errorMessage
@@ -98,14 +97,14 @@ export class UserVipComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy))
       .subscribe((data) => {
         if (data.token) {
-          this._store.dispatch(new Subscribe({
+          this._store.dispatch(subscribeStripe({
             "name": name,
             "email": localStorage.getItem("email"),
             "token": data.token.id,
             "plan": plan
           }))
         } else if (data.error) {
-          this._store.dispatch(new SubscribeFailure(data.error.message));
+          this._store.dispatch(subscribeStripeFailure({errorMessage: data.error.message}));
         }
       },
       err => this.errorMessage = err.errorMessage
@@ -113,13 +112,13 @@ export class UserVipComponent implements OnInit, OnDestroy {
   }
 
   showSubs(): void {
-    this._store.dispatch(new ListSubscriptions({ 'customer_id': this.subscription.customer_id }));
+    this._store.dispatch(getStripeSubs({ 'customer_id': this.customerSub.customer_id }));
   }
 
   cancelSub(id): void {
     if(confirm("Are you sure that you want to cancel this subscription?")) {
       this.paymetSvc.cancelSub({id: id}).pipe(takeUntil(this.destroy)).subscribe();
-      this._store.dispatch(new CancelSubscription({}));
+      this._store.dispatch(cancelSubStripe());
     }
   }
 }

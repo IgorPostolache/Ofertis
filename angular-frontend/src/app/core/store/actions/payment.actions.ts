@@ -1,55 +1,29 @@
-import { Action } from "@ngrx/store";
+import { createAction, props } from "@ngrx/store";
 
-export enum PaymentActionTypes {
-  SUBSCRIBE = '[User_VIP] Subscribe.',
-  SUBSCRIBE_SUCCESS = '[User_VIP] Subscribe Success.',
-  SUBSCRIBE_FAILURE = '[User_VIP] Subscribe Failure.',
-  CANCEL_SUBSCRIPTION = '[User_VIP] Cancel Subscription.',
-  LIST_SUBSCRIPTIONS = '[User_VIP] List Subscriptions.',
-  LIST_SUBSCRIPTIONS_SUCCESS = '[User_VIP] List Subscriptions Success.',
-  LIST_SUBSCRIPTIONS_FAILURE = '[User_VIP] List Subscriptions Failure.',
-}
-
-export class Subscribe implements Action {
-  readonly type = PaymentActionTypes.SUBSCRIBE;
-  constructor(public payload: any){}
-}
-
-export class SubscribeSuccess implements Action {
-  readonly type = PaymentActionTypes.SUBSCRIBE_SUCCESS;
-  constructor(public payload: any){}
-}
-
-export class SubscribeFailure implements Action {
-  readonly type = PaymentActionTypes.SUBSCRIBE_FAILURE;
-  constructor(public payload: any){}
-}
-
-export class CancelSubscription implements Action {
-  readonly type = PaymentActionTypes.CANCEL_SUBSCRIPTION;
-  constructor(public payload: any){}
-}
-
-export class ListSubscriptions implements Action {
-  readonly type = PaymentActionTypes.LIST_SUBSCRIPTIONS;
-  constructor(public payload: any){}
-}
-
-export class ListSubscriptionsSuccess implements Action {
-  readonly type = PaymentActionTypes.LIST_SUBSCRIPTIONS_SUCCESS;
-  constructor(public payload: any){}
-}
-
-export class ListSubscriptionsFailure implements Action {
-  readonly type = PaymentActionTypes.LIST_SUBSCRIPTIONS_FAILURE;
-  constructor(public payload: any){}
-}
-
-export type PaymentType =
-  | Subscribe
-  | SubscribeSuccess
-  | SubscribeFailure
-  | CancelSubscription
-  | ListSubscriptions
-  | ListSubscriptionsSuccess
-  | ListSubscriptionsFailure
+export const subscribeStripe = createAction(
+  '[User_VIP] Subscribe.',
+  props<{name: string, email: string, token: string, plan: string}>()
+);
+export const subscribeStripeSuccess = createAction(
+  '[User_VIP] Subscribe Success.',
+  props<{customer_id: string, subscription_id: string, subscription_name: string}>()
+);
+export const subscribeStripeFailure = createAction(
+  '[User_VIP] Subscribe Failure.',
+  props<{errorMessage: string}>()
+);
+export const cancelSubStripe = createAction(
+  '[User_VIP] Cancel subscribe.'
+);
+export const getStripeSubs = createAction(
+  '[User_VIP] Get subscriptions.',
+  props<{customer_id: string}>()
+);
+export const getStripeSubsSuccess = createAction(
+  '[User_VIP] List subscriptions success.',
+  props<{subscriptions: {}}>()
+);
+export const getStripeSubsFailure = createAction(
+  '[User_VIP] List subscriptions failure.',
+  props<{errorMessage: string}>()
+);

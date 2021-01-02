@@ -10,5 +10,6 @@ public class JwtResponse {
 	@NonNull private String accessToken;
 	private String tokenType = "Bearer";
 	@NonNull private String username;
-	@NonNull private String role;	
+	@NonNull private String role;
+	@NonNull private String email;
 }

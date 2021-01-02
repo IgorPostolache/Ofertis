@@ -4,11 +4,11 @@
 <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#manage-subs">Manage Subscriptions</button>
 <div id="manage-subs" class="collapse">
   <h1>Subscriptions</h1>
-  <div class="alert alert-success alert-dismissible fade show" *ngIf="subscription.subscription_message">
-    {{ subscription.subscription_message }}
+  <div class="alert alert-success alert-dismissible fade show" *ngIf="customerSub.subscription_message">
+    {{ customerSub.subscription_message }}
     <button type="button" class="close" data-dismiss="alert">&times;</button>
   </div>
-  <div *ngIf="!subscription.subscription_id">
+  <div *ngIf="!customerSub.subscription_id">
   <button type="button" class="btn btn-warning" data-toggle="collapse" data-target="#create-sub">Create Subscription</button>
     <div id="create-sub" class="collapse">
       <div class="row justify-content-center">
@@ -89,7 +89,7 @@
   <hr>
   </div>
 
-  <div *ngIf="subscription.subscription_id">
+  <div *ngIf="customerSub.subscription_id">
   <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#show-subs" (click)="showSubs()">
     Current Subscriptions
   </button>
@@ -110,7 +110,7 @@
       </thead>
       <tbody *ngIf="subList.length > 0">
         <tr *ngFor="let sub of subList">
-          <td>{{ subscription.subscription_name }}</td>
+          <td>{{ customerSub.subscription_name }}</td>
           <td>{{ sub.currentPeriodStart | millisToDate }}</td>
           <td>{{ sub.currentPeriodEnd | millisToDate }}</td>
           <td>{{ sub.items.data[0].plan.interval }}</td>

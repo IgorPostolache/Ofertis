@@ -67,7 +67,7 @@ public class AuthenticationController {
 		// CLEANING "[" and "]" from String.
 		role = role.substring(1);
 		role = role.substring(0,role.length() - 1 );
-		return ResponseEntity.ok(new JwtResponse(jwt, authentication.getName(), role));
+		return ResponseEntity.ok(new JwtResponse(jwt, authentication.getName(), role, login.getEmail()));
 	}
 	// THE USER CAN OPTIONALLY REGISTER WITH MULTIPLE ROLES 
 	// BUT SO FAR I ONLY ALLOW TO REGISTER WITH ROLE_USER, 
@@ -137,6 +137,6 @@ public class AuthenticationController {
 		// REMOVE THE NEXT TWO LINES BELLOW IF WANT TO SHOW AN ARRAY WITH USER ROLES INSTEAD OF A STRING...
 		StringBuilder strBul = new StringBuilder();
 		for(String str: user_roles) {if(str == "ROLE_USER")strBul.append("ROLE_USER");}
-		return new ResponseEntity(new JwtResponse(jwt, authentication.getName(), strBul.toString()), HttpStatus.CREATED);
+		return new ResponseEntity(new JwtResponse(jwt, authentication.getName(), strBul.toString(), register.getEmail()), HttpStatus.CREATED);
 	}
 }

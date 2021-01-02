@@ -1,6 +1,9 @@
-import { PaymentActionTypes, PaymentType } from "../actions/payment.actions";
+import { createReducer, on, Action } from "@ngrx/store";
+import * as paymentActions from './../actions/payment.actions';
 
-export interface State {
+export const paymentFeatureName = 'payment';
+
+export interface PaymentState {
   customer_id: string | null;
   subscription_id: string | null;
   subscription_name: string | null;
@@ -8,7 +11,7 @@ export interface State {
   subscriptions: object;
 }
 
-export const initialState: State = {
+export const initialPaymentState: PaymentState = {
   customer_id: null,
   subscription_id: null,
   subscription_name: null,
@@ -16,39 +19,23 @@ export const initialState: State = {
   subscriptions: {}
 }
 
-export function reducer(state = initialState, action: PaymentType): State {
-  switch(action.type) {
-    case PaymentActionTypes.SUBSCRIBE_SUCCESS:
-      return {
-        ...state,
-        customer_id: action.payload.customer_id,
-        subscription_id: action.payload.subscription_id,
-        subscription_name: action.payload.subscription_name,
-        subscription_message: "You have successefully subscribed."
-      }
-    case PaymentActionTypes.SUBSCRIBE_FAILURE:
-      return {
-        ...state,
-        subscription_message: action.payload
-      }
-    case PaymentActionTypes.CANCEL_SUBSCRIPTION:
-      return {
-        ...state,
-        subscription_id: null
-      }
+const paymentInternalreducer = createReducer(
+  initialPaymentState,
+  on(paymentActions.subscribeStripeSuccess, (state, {customer_id, subscription_id, subscription_name}) => {
+    return {
+      ...state,
+      customer_id,
+      subscription_id,
+      subscription_name,
+      subscription_message: "You have successefully subscribed."
+    }
+  }),
+  on(paymentActions.subscribeStripeFailure, (state, erroMessage) => ({...state, erroMessage})),
+  on(paymentActions.cancelSubStripe, state => ({...state, subscription_id: null})),
+  on(paymentActions.getStripeSubsSuccess, (state, {subscriptions}) => ({...state, subscriptions})),
+  on(paymentActions.getStripeSubsFailure, (state, erroMessage) => ({...state, subscriptions:{}, erroMessage})),
+);
 
-    case PaymentActionTypes.LIST_SUBSCRIPTIONS_SUCCESS:
-      return {
-        ...state,
-        subscriptions: action.payload
-      }
-    case PaymentActionTypes.LIST_SUBSCRIPTIONS_FAILURE:
-      return {
-        ...state,
-        subscriptions: {},
-        subscription_message: action.payload
-      }
-    default:
-      return state;
-  }
+export function paymentReducer(state: PaymentState | undefined, action: Action){
+  return paymentInternalreducer(state, action);
 }

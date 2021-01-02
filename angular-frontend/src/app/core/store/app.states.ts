@@ -12,7 +12,7 @@ export interface AppState {
 export const reducers = {
   auth: auth.authReducer,
   job: job.reducer,
-  payment: payment.reducer,
+  payment: payment.paymentReducer,
   profile: profile.profileReducer
 }
 

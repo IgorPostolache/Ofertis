@@ -1,4 +1,4 @@
-export class Subscript {
+export class CustomerSub {
   customer_id: string;
   subscription_id: string;
   subscription_name: string;
