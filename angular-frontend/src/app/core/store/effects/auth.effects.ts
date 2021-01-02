@@ -4,7 +4,7 @@ import { Actions, createEffect, Effect, ofType } from "@ngrx/effects";
 import { Observable, of } from "rxjs";
 import { map, exhaustMap, catchError, tap} from "rxjs/operators";
 import { AuthService } from "../../services/auth/auth.service";
-import * as authActions from './../actions/auth.actions';
+import { login, loginFailure, loginSuccess, logout, register, registerFailure, registerSuccess } from "./../actions/auth.actions";
 
 @Injectable()
 export class AuthEffects {
@@ -16,14 +16,14 @@ export class AuthEffects {
 
   login$ = createEffect(()=>
     this.action$.pipe(
-      ofType(authActions.login),
-      exhaustMap(action =>
-        this.authService.login(action).pipe(
-          map(api => {
-            return authActions.loginSuccess(api)
+      ofType(login),
+      exhaustMap(payload =>
+        this.authService.login(payload).pipe(
+          map(res => {
+            return loginSuccess(res)
           }),
-          catchError(error =>
-            of( authActions.loginFailure({errorMessage: error.error.message}))
+          catchError(err =>
+            of(loginFailure({ errorMessage: err.error.message }))
           )
         )
       )
@@ -32,7 +32,7 @@ export class AuthEffects {
 
   @Effect({ dispatch: false })
   loginSucces$: Observable<any> = this.action$.pipe(
-    ofType(authActions.loginSuccess),
+    ofType(loginSuccess),
     tap((data) => {
       localStorage.setItem('token', data.tokenType + " " + data.accessToken);
       localStorage.setItem('role', data.role);
@@ -43,19 +43,26 @@ export class AuthEffects {
 
   @Effect({ dispatch: false })
   loginFailure$: Observable<any> = this.action$.pipe(
-    ofType(authActions.loginFailure),
+    ofType(loginFailure),
     tap(err => console.log(err))
   );
 
   register$ = createEffect(() =>
     this.action$.pipe(
-      ofType(authActions.register),
-      exhaustMap(action => {
-        return this.authService.register(action).pipe(
+      ofType(register),
+      exhaustMap(payload => {
+        return this.authService.register(payload).pipe(
           map((api: any) => {
-            return authActions.registerSuccess({ username: api.username, email: action.email, role: api.role, token: api.tokenType + " " + api.accessToken })
+            return registerSuccess(
+              {
+                username: api.username,
+                email: payload.email,
+                role: api.role,
+                token: api.tokenType + " " + api.accessToken
+              }
+            )
           }),
-          catchError(err => of(authActions.registerFailure({ errorMessage: err.error.message }))
+          catchError(err => of(registerFailure({ errorMessage: err.error.message }))
           )
         );
       })
@@ -64,7 +71,7 @@ export class AuthEffects {
 
   @Effect({ dispatch: false })
   registerSucces$: Observable<any> = this.action$.pipe(
-    ofType(authActions.registerSuccess),
+    ofType(registerSuccess),
     tap((res) => {
       console.log(res);
       localStorage.setItem('token', res.token);
@@ -76,7 +83,7 @@ export class AuthEffects {
 
   @Effect({ dispatch: false })
   registerFailure: Observable<any> = this.action$.pipe(
-    ofType(authActions.registerFailure),
+    ofType(registerFailure),
     tap((err) => {
       console.log(err);
     })
@@ -84,7 +91,7 @@ export class AuthEffects {
 
   @Effect({ dispatch: false })
   logout$: Observable<any> = this.action$.pipe(
-    ofType(authActions.logout),
+    ofType(logout),
     tap(()=> {
       localStorage.removeItem('token');
       localStorage.removeItem('role');
