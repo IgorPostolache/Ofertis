@@ -1,72 +1,33 @@
-import { Job } from "src/app/shared/models/job/job";
-import { JobActionTypes, JobType } from "../actions/job.actions";
+import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
+import { createReducer, on, Action } from "@ngrx/store";
+import { Job } from "src/app/shared/models/job/job.model";
+import * as jobActions from "../actions/job.actions";
 
-export interface State {
-  message: string | null;
-  jobs: Job[];
+export const jobFeatureName = 'job';
+
+export interface JobState extends EntityState<Job> {}
+
+export const adapter: EntityAdapter<Job> = createEntityAdapter<Job>();
+
+export const initialJobState = adapter.getInitialState({});
+
+const jobReducerInternal = createReducer(
+  initialJobState,
+  on(jobActions.addJobSuccess, (state, {job}) => adapter.addOne(job, state)),
+  on(jobActions.addJobFailure, (state, {errorMessage}) => ({...state, errorMessage})),
+  on(jobActions.deleteJobSuccess, (state, {id}) => adapter.removeOne(id, state)),
+  on(jobActions.deleteJobFailure, (state, {errorMessage}) => ({...state, errorMessage})),
+  on(jobActions.getJobSuccess, (state, {job}) => ({...state, job})),
+  on(jobActions.getJobFailure, (state, {errorMessage}) => ({...state, errorMessage})),
+  on(jobActions.getJobsSuccess, (state, {jobs}) => adapter.setAll(jobs, state)),
+  on(jobActions.updateJobSuccess, (state, {update}) => adapter.updateOne(update, state)),
+  on(jobActions.updateJobFailure, (state, {errorMessage}) => ({...state, errorMessage})),
+);
+
+export function jobReducer(state: JobState | undefined, action: Action) {
+  return jobReducerInternal(state, action);
 }
 
-export const initialState: State = {
-  message: null,
-  jobs: []
-}
+const { selectAll } = adapter.getSelectors();
 
-export function reducer(state = initialState, action: JobType): State {
-  switch(action.type){
-    case JobActionTypes.ADD_JOB_SUCCESS:
-      return {
-        ...state,
-        jobs: [...state.jobs, action.payload]
-      }
-    case JobActionTypes.ADD_JOB_FAILURE:
-      return {
-        ...state,
-        message: action.payload
-      }
-    case JobActionTypes.DELETE_JOB_SUCCESS:
-    return {
-        ...state,
-        jobs: state.jobs.filter(job => job.id != action.payload)
-      }
-    case JobActionTypes.DELETE_JOB_FAILURE:
-    return {
-        ...state,
-        message: action.payload
-      }
-    case JobActionTypes.GET_JOB_SUCCESS:
-      return {
-        ...state,
-        jobs: [action.payload]
-      }
-    case JobActionTypes.GET_JOB_FAILURE:
-      return {
-        ...state,
-        message: action.payload
-      }
-    case JobActionTypes.GET_JOBS_SUCCESS:
-      return {
-        ...state,
-        jobs: action.payload
-      }
-    case JobActionTypes.GET_JOBS_FAILURE:
-      return {
-        ...state,
-        message: action.payload
-      }
-    case JobActionTypes.UPDATE_JOB_SUCCESS:
-      let updated_job_array = state.jobs.filter(job => job.id != action.payload.id);
-      updated_job_array.push(action.payload);
-      return {
-        ...state,
-        jobs: updated_job_array
-      }
-    case JobActionTypes.UPDATE_JOB_FAILURE:
-      return {
-        ...state,
-        message: action.payload
-      }
-    default: {
-      return state;
-    }
-  }
-}
+export const selectAllJobs = selectAll;

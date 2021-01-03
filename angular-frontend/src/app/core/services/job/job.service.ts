@@ -21,13 +21,13 @@ export class JobService {
   deleteJob(id: string): Observable<any> {
     return this.http.delete(JOB_API + id, httpOptions);
   }
-  getJob(id: string): Observable<Job> {
+  getJob(id: number): Observable<Job> {
     return this.http.get<Job>(JOB_API + id);
   }
   getJobs(): Observable<Job[]> {
     return this.http.get<Job[]>(JOB_API);
   }
-  updateJob(job: Job): Observable<any> {
-    return this.http.put(JOB_API, job, httpOptions);
+  updateJob(job: Job): Observable<Job> {
+    return this.http.put<Job>(JOB_API, job, httpOptions);
   }
 }
