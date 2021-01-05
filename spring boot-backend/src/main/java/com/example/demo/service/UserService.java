@@ -19,6 +19,10 @@ public class UserService {
 		return userRepository.findByUsernameOrEmail(username, email);
 	}
 	
+	public Optional<User> loadByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+	
 	public Boolean existsByUsername(String username) {
 		return userRepository.existsByUsername(username);
 	}
@@ -29,4 +33,5 @@ public class UserService {
 	public void save(User user) {
 		userRepository.save(user);
 	}
+	
 }
