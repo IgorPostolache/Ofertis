@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -29,8 +30,8 @@ public class OfertisApplication {
 	    mailSender.setHost("smtp.gmail.com");
 	    mailSender.setPort(587);
 	    
-	    mailSender.setUsername("yourEmail");
-	    mailSender.setPassword("yourPassword");
+	    mailSender.setUsername("yourGMAIL");
+	    mailSender.setPassword("yourpassword");
 	    
 	    Properties props = mailSender.getJavaMailProperties();
 	    props.put("mail.transport.protocol", "smtp");
@@ -39,5 +40,12 @@ public class OfertisApplication {
 	    props.put("mail.debug", "true");
 	    
 	    return mailSender;
+	}
+	
+	@Bean(name="messageSource")
+	public ResourceBundleMessageSource bundleMessageSource() {
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("messages");
+		return messageSource;
 	}
 }

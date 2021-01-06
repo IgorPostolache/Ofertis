@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h1 class="text-center">Reset Password</h1>
+      <hr><br>
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input [(ngModel)]="user.email" name="email" type="email" required class="form-control" id="email"
+            placeholder="enter your email">
+        </div>
+        <button type="submit" class="btn btn-primary"
+          [disabled]="user.email == undefined">Reset</button>
+        <a [routerLink]="['/']" class="btn btn-success ml-3">Cancel</a>
+      </form>
+      <div class="alert alert-warning" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+</div>

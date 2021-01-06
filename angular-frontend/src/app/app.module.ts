@@ -34,6 +34,8 @@ import { JobEffects } from './core/store/effects/job.effects';
 import { SubscriptionUpdateComponent } from './components/payment/subscriptions/subscription-update/subscription-update.component';
 import { SubscriptionsListComponent } from './components/payment/subscriptions/subscriptions-list/subscriptions-list.component';
 import { SubscriptionsComponent } from './components/payment/subscriptions/subscriptions.component';
+import { InputEmailComponent } from './components/auth/reset/input-email/input-email.component';
+import { ResetPasswordComponent } from './components/auth/reset/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { SubscriptionsComponent } from './components/payment/subscriptions/subsc
     JobUpdateComponent,
     SubscriptionUpdateComponent,
     SubscriptionsListComponent,
-    SubscriptionsComponent
+    SubscriptionsComponent,
+    InputEmailComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

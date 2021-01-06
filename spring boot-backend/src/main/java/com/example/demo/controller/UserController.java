@@ -16,15 +16,16 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.User;
 import com.example.demo.model.VerificationToken;
 import com.example.demo.payload.request.ChangePasswordRequest;
+import com.example.demo.payload.request.ResetPasswordRequest;
 import com.example.demo.payload.response.ApiResponse;
 import com.example.demo.service.MailService;
 import com.example.demo.service.UserService;
@@ -33,7 +34,7 @@ import com.example.demo.service.VerificationTokenService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 @Slf4j
 public class UserController {
 	@Autowired
@@ -55,9 +56,10 @@ public class UserController {
 	private VerificationTokenService verificationTokenService;
 	
 	@PostMapping("/reset_password")
-	public ResponseEntity<?> resetPassword(HttpServletRequest req, @RequestParam("email") String reqEmail) {
-		User user = userService.loadByEmail(reqEmail)
-				.orElseThrow(() -> new UsernameNotFoundException("No user found for the email " + reqEmail));
+	public ResponseEntity<?> resetPassword(HttpServletRequest req, @Valid @RequestBody ResetPasswordRequest reqEmail) {
+		User user = userService.loadByEmail(reqEmail.getEmail());
+		if (user == null)
+			return new ResponseEntity(new ApiResponse(false, "No user found for the email " + reqEmail.getEmail()), HttpStatus.BAD_REQUEST);
 		String token = UUID.randomUUID().toString();
 		verificationTokenService.createPasswordResetToken(token, user);
 		
@@ -99,5 +101,4 @@ public class UserController {
 		
 		return ResponseEntity.ok(new ApiResponse(true, "You have successefully changed the password."));
 	}
-	
 }

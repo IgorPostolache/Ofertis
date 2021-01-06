@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
+import { InputEmailComponent } from './components/auth/reset/input-email/input-email.component';
+import { ResetPasswordComponent } from './components/auth/reset/reset-password/reset-password.component';
 import { HomeComponent } from './components/home/home.component';
 import { JobUpdateComponent } from './components/jobs/job-update/job-update.component';
 import { JobComponent } from './components/jobs/job/job.component';
@@ -30,6 +32,9 @@ const routes: Routes = [
   },
 
   { path: 'register', component: RegisterComponent },
+
+  { path: 'reset', component: InputEmailComponent },
+  { path: 'reset_password/:token', component: ResetPasswordComponent },
 
   { path: '', component: HomeComponent },
   { path: '**', redirectTo: '/'}

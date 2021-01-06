@@ -42,7 +42,7 @@ public class MailService {
         email.setTo(user.getEmail());
         email.setSubject("Reset Password");
         
-        String url = contextPath + "/reset_password?token=" + token;
+        String url = contextPath + "/reset_password/" + token;
         String message = messages.getMessage("message.resetPasswordEmail", null, locale);
         email.setText(message + " \r\n" + url);
         

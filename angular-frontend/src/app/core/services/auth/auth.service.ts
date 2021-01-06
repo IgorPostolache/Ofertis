@@ -5,6 +5,8 @@ import { User } from 'src/app/shared/models/user/user';
 
 const AUTH_API = 'http://localhost:8080/api/auth/';
 const PROFILE_API = 'http://localhost:8080/api/profile/';
+const USER_API = 'http://localhost:8080/api/user/';
+
 const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -46,5 +48,11 @@ export class AuthService {
   }
   getUserAdminProfile(): Observable<any> {
     return this.http.get(PROFILE_API + "user_admin");
+  }
+  resetPasswordCheckEmail(email: string): Observable<any> {
+    return this.http.post( USER_API + "reset_password", { "email": email }, httpOptions );
+  }
+  resetPassword(user: User): Observable<any> {
+    return this.http.post( USER_API + "change_password", user, httpOptions );
   }
 }

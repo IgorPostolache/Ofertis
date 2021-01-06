@@ -19,7 +19,7 @@ public class UserService {
 		return userRepository.findByUsernameOrEmail(username, email);
 	}
 	
-	public Optional<User> loadByEmail(String email) {
+	public User loadByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
 	
