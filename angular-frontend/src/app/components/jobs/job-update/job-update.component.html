@@ -1,3 +1,7 @@
+<app-loading-spinner *ngIf="spinnerService.visibility | async; else notLoading"></app-loading-spinner>
+
+<ng-template #notLoading>
+
 <div class="row justify-content-center">
   <div class="col-6">
     <h1 class="text-center">{{ action | titlecase }} Job</h1>
@@ -25,3 +29,5 @@
     </div>
   </div>
 </div>
+
+</ng-template>

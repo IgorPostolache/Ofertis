@@ -5,6 +5,7 @@ import { StripeCardElementOptions, StripeElementsOptions } from '@stripe/stripe-
 import { StripeCardComponent, StripeService } from 'ngx-stripe';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SpinnerService } from 'src/app/core/services/spinner/spinner.service';
 import { subscribeStripe, subscribeStripeFailure } from 'src/app/core/store/actions/payment.actions';
 import { AppState, selectProfileState } from 'src/app/core/store/app.states';
 
@@ -20,7 +21,8 @@ export class SubscriptionUpdateComponent implements OnInit, OnDestroy {
 
   constructor(
     private _store: Store<AppState>,
-    private stripeService: StripeService) { }
+    private stripeService: StripeService,
+    public spinnerService: SpinnerService) { }
 
   get name() { return this.stripeTest.get('name'); }
 

@@ -5,6 +5,7 @@ import { AppState, selectAuthState } from 'src/app/core/store/app.states';
 import { User } from 'src/app/shared/models/user/user';
 import { login } from 'src/app/core/store/actions/auth.actions';
 import { takeUntil } from 'rxjs/operators';
+import { SpinnerService } from 'src/app/core/services/spinner/spinner.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   errorMessage: string | null;
   user: User = new User();
 
-  constructor(private _store: Store<AppState>) {}
+  constructor(private _store: Store<AppState>, public spinnerService: SpinnerService) {}
 
   ngOnInit(): void {
     this._store.select(selectAuthState).pipe(takeUntil(this.destroy)).subscribe((state: any) => {

@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SpinnerService } from 'src/app/core/services/spinner/spinner.service';
 import { register } from 'src/app/core/store/actions/auth.actions';
 import { AppState, selectAuthState } from 'src/app/core/store/app.states';
 import { checkPasswordStrength } from 'src/app/shared/misc/functions/checkPasswordStrength';
@@ -19,7 +20,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   registerForm: FormGroup;
   user: User = new User();
 
-  constructor(private _store: Store<AppState>) {}
+  constructor(private _store: Store<AppState>, public spinnerService: SpinnerService) {}
 
   ngOnInit(): void {
     this._store.select(selectAuthState).pipe(takeUntil(this.destroy)).subscribe((state: any) =>

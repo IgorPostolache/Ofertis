@@ -36,6 +36,11 @@ import { SubscriptionsListComponent } from './components/payment/subscriptions/s
 import { SubscriptionsComponent } from './components/payment/subscriptions/subscriptions.component';
 import { InputEmailComponent } from './components/auth/reset/input-email/input-email.component';
 import { ResetPasswordComponent } from './components/auth/reset/reset-password/reset-password.component';
+import { SpinnerInterceptor } from './core/interceptors/spinner.interceptor';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 
 @NgModule({
   declarations: [
@@ -57,7 +62,8 @@ import { ResetPasswordComponent } from './components/auth/reset/reset-password/r
     SubscriptionsListComponent,
     SubscriptionsComponent,
     InputEmailComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    LoadingSpinnerComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,11 +73,15 @@ import { ResetPasswordComponent } from './components/auth/reset/reset-password/r
     HttpClientModule,
     StoreModule.forRoot(reducers, {}),
     EffectsModule.forRoot([AuthEffects, JobEffects, PaymentEffects, ProfileEffects]),
-    NgxStripeModule.forRoot('pk_test_51I1XH9KxGSTi9Lm0aA9ik8wjFfKL0oI4xR3iKg0z3BNmf0MGHp1WYnTYS7b0GMYRKFPf28TyFnYc0YtDleDyeDm100nIweVqz0')
+    NgxStripeModule.forRoot('pk_test_51I1XH9KxGSTi9Lm0aA9ik8wjFfKL0oI4xR3iKg0z3BNmf0MGHp1WYnTYS7b0GMYRKFPf28TyFnYc0YtDleDyeDm100nIweVqz0'),
+    BrowserAnimationsModule,
+    MatProgressSpinnerModule
+
   ],
   providers: [
     AuthGuard,
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

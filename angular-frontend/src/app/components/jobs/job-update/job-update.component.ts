@@ -8,6 +8,7 @@ import { Job } from 'src/app/shared/models/job/job';
 import { Location } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SpinnerService } from 'src/app/core/services/spinner/spinner.service';
 
 @Component({
   selector: 'app-job-update',
@@ -25,7 +26,8 @@ export class JobUpdateComponent implements OnInit, OnDestroy {
   constructor(
     private _store: Store<AppState>,
     private route: ActivatedRoute,
-    private location: Location) { }
+    private location: Location,
+    public spinnerService: SpinnerService) { }
 
   ngOnInit(): void {
     this._store.select(selectJobState).pipe(takeUntil(this.destroy))
