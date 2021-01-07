@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.Job;
+import com.example.demo.model.Service;
 import com.example.demo.model.User;
 import com.example.demo.payload.response.ApiResponse;
+import com.example.demo.repository.ServiceRepository;
 import com.example.demo.security.JwtProvider;
 import com.example.demo.service.JobService;
 
@@ -33,6 +35,9 @@ public class JobController {
 	
 	@Autowired
 	JwtProvider jwtProvider;
+	
+	@Autowired
+	ServiceRepository serviceRepository;
 	
 	@GetMapping
 	public List<Job> getAllJobs() {
@@ -55,6 +60,8 @@ public class JobController {
 	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public ResponseEntity<?> addJob(@Valid @RequestBody Job job, HttpServletRequest req) {
 		User user = jwtProvider.getUserFromAuthorizationHeader(req);
+		Service service = serviceRepository.findByIdOrUserId(user.getId(), user.getId())
+				.orElseThrow(() -> new BadRequestException("No active subscription was found for the current user."));
 		job.setUser(user);
 		jobService.save(job);
 		return new ResponseEntity(job, HttpStatus.CREATED);
@@ -62,10 +69,15 @@ public class JobController {
 	
 	@PutMapping
 	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
-	public ResponseEntity<?> updateJob(@Valid @RequestBody Job jobReq) {
+	public ResponseEntity<?> updateJob(@Valid @RequestBody Job jobReq, HttpServletRequest req) {
+		User user = jwtProvider.getUserFromAuthorizationHeader(req);
+		Service service = serviceRepository.findByIdOrUserId(user.getId(), user.getId())
+				.orElseThrow(() -> new BadRequestException("No active subscription was found for the current user."));
+		
 		if (jobReq.getId() == null) return new ResponseEntity(new BadRequestException("Job id must be provided"), HttpStatus.BAD_REQUEST);
 		Job job = jobService.loadById(jobReq.getId()).orElseThrow(
 				() -> new BadRequestException("No job found by id " + jobReq.getId()));
+		
 		job.setName(jobReq.getName());
 		jobService.save(job);
 		return ResponseEntity.ok(job);
@@ -73,7 +85,11 @@ public class JobController {
 	
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
-	public ResponseEntity<?> deleteJob(@PathVariable Long id) {
+	public ResponseEntity<?> deleteJob(@PathVariable Long id, HttpServletRequest req) {
+		User user = jwtProvider.getUserFromAuthorizationHeader(req);
+		Service service = serviceRepository.findByIdOrUserId(user.getId(), user.getId())
+				.orElseThrow(() -> new BadRequestException("No active subscription was found for the current user."));
+		
 		Job job = jobService.loadById(id).orElseThrow(
 				() -> new BadRequestException("No job found by id " + id));
 		jobService.delete(job);
