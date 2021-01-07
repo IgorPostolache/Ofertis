@@ -29,6 +29,7 @@
           {{ username }}
         </a>
         <div class="dropdown-menu">
+          <a [routerLink]="['/jobs/add']" class="dropdown-item">Post Job</a>
           <a [routerLink]="['/profile']" class="dropdown-item">My Profile</a>
           <a [routerLink]="['*']" class="dropdown-item" (click)="logoutUser()">Log out</a>
         </div>
