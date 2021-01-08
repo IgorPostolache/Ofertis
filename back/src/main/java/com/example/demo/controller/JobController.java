@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,6 +57,13 @@ public class JobController {
 		return ResponseEntity.ok(jobs);
 	}
 	
+	@GetMapping("/user")
+	public ResponseEntity<?> getAllUserJobs(HttpServletRequest req) {
+		long id = jwtProvider.getUserFromAuthorizationHeader(req).getId();
+		List<Job> jobs = jobService.loadByUserId(id);
+		return ResponseEntity.ok(jobs);
+	}
+	
 	@PostMapping
 	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public ResponseEntity<?> addJob(@Valid @RequestBody Job job, HttpServletRequest req) {
@@ -95,5 +103,12 @@ public class JobController {
 		jobService.delete(job);
 		return ResponseEntity.ok(new ApiResponse(true, "Job was deleted."));
 	}
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	
+	@GetMapping("/hi")
+	public String hi() {
+		System.err.println(passwordEncoder.encode("aaaaaa"));
+		return "HI";
+	}
 }

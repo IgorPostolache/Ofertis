@@ -5,11 +5,15 @@ import * as jobActions from "../actions/job.actions";
 
 export const jobFeatureName = 'job';
 
-export interface JobState extends EntityState<Job> {}
+export interface JobState extends EntityState<Job> {
+  showUserJobs: boolean;
+}
 
 export const adapter: EntityAdapter<Job> = createEntityAdapter<Job>();
 
-export const initialJobState = adapter.getInitialState({});
+export const initialJobState = adapter.getInitialState({
+  showUserJobs: false
+});
 
 const jobReducerInternal = createReducer(
   initialJobState,
@@ -19,7 +23,10 @@ const jobReducerInternal = createReducer(
   on(jobActions.deleteJobFailure, (state, {errorMessage}) => ({...state, errorMessage})),
   on(jobActions.getJobSuccess, (state, {job}) => ({...state, job})),
   on(jobActions.getJobFailure, (state, {errorMessage}) => ({...state, errorMessage})),
-  on(jobActions.getJobsSuccess, (state, {jobs}) => adapter.setAll(jobs, state)),
+  on(jobActions.getJobsSuccess, (state, {jobs}) => adapter.setAll(jobs, {...state, showUserJobs: true})),
+  on(jobActions.getJobsFailure, (state, {errorMessage}) => ({...state, errorMessage})),
+  on(jobActions.getUserJobsSuccess, (state, {jobs}) => adapter.setAll(jobs, {...state, showUserJobs: false})),
+  on(jobActions.getUserJobsFailure, (state, {errorMessage}) => ({...state, errorMessage})),
   on(jobActions.updateJobSuccess, (state, {update}) => adapter.updateOne(update, state)),
   on(jobActions.updateJobFailure, (state, {errorMessage}) => ({...state, errorMessage})),
 );

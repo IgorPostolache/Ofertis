@@ -27,6 +27,9 @@ export class JobService {
   getJobs(): Observable<Job[]> {
     return this.http.get<Job[]>(JOB_API);
   }
+  getUserJobs(): Observable<Job[]> {
+    return this.http.get<Job[]>(JOB_API + "user");
+  }
   updateJob(job: Job): Observable<Job> {
     return this.http.put<Job>(JOB_API, job, httpOptions);
   }

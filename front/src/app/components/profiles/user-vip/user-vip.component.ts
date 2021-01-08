@@ -14,6 +14,7 @@ import { CustomerSub } from 'src/app/shared/models/customer/customer';
 export class UserVipComponent implements OnInit, OnDestroy {
   customerSub: CustomerSub = new CustomerSub();
   private destroy: Subject<boolean> = new Subject<boolean>();
+  email: string;
   errorMessage: string;
   subList: any = [];
   token: string;
@@ -29,6 +30,7 @@ export class UserVipComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: any) => this.user_vip = data.content),
         err => this.errorMessage = err.errorMessage;
+    this.email = localStorage.getItem("email");
   }
 
   ngOnDestroy(): void {

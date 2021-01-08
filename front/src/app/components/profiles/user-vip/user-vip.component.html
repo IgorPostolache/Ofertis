@@ -2,6 +2,12 @@
 <div class="container-fluid">
   {{ user_vip }}
   <br>
+  <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#manage-jobs">Manage
+    Jobs</button>
+  <div id="manage-jobs" class="collapse">
+    <app-jobs [showMyJobs]="true" [userEmail]="email"></app-jobs>
+  </div>
+  <br>
   <app-subscriptions></app-subscriptions>
 </div>
 

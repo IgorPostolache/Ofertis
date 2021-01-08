@@ -3,7 +3,7 @@ import { Actions, createEffect, Effect, ofType } from "@ngrx/effects";
 import { Observable, of } from "rxjs";
 import { catchError, exhaustMap, map, tap } from "rxjs/operators";
 import { JobService } from "../../services/job/job.service";
-import { addJob, addJobFailure, addJobSuccess, deleteJob, deleteJobFailure, deleteJobSuccess, getJob, getJobFailure, getJobs, getJobsFailure, getJobsSuccess, getJobSuccess, updateJob, updateJobFailure, updateJobSuccess } from "../actions/job.actions";
+import { addJob, addJobFailure, addJobSuccess, deleteJob, deleteJobFailure, deleteJobSuccess, getJob, getJobFailure, getJobs, getJobsFailure, getJobsSuccess, getJobSuccess, getUserJobs, getUserJobsFailure, getUserJobsSuccess, updateJob, updateJobFailure, updateJobSuccess } from "../actions/job.actions";
 import { Location } from '@angular/common';
 import { Job } from "src/app/shared/models/job/job.model";
 
@@ -111,6 +111,35 @@ export class JobEffects {
   @Effect({ dispatch: false })
   getJobsFailure$: Observable<any> = this.action$.pipe(
     ofType(getJobsFailure),
+    tap(err => console.log(err))
+  );
+
+  getUserJobs$ = createEffect(() =>
+    this.action$.pipe(
+      ofType(getUserJobs),
+      exhaustMap(() =>
+        this.jobSrv.getUserJobs().pipe(
+          map((jobs: Job[]) => {
+            return getUserJobsSuccess({jobs})
+          }),
+          catchError((err) => {
+            console.log(err);
+            return of(getUserJobsFailure({errorMessage: err.error.message}))
+          })
+        )
+      )
+    )
+  );
+
+  @Effect({ dispatch: false })
+  getUserJobsSucces$: Observable<any> = this.action$.pipe(
+    ofType(getUserJobsSuccess),
+    tap(res => console.log(res))
+  );
+
+  @Effect({ dispatch: false })
+  getUserJobsFailure$: Observable<any> = this.action$.pipe(
+    ofType(getUserJobsFailure),
     tap(err => console.log(err))
   );
 

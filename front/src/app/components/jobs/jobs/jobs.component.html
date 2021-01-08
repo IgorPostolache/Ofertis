@@ -1,5 +1,9 @@
 <div  *ngIf="(jobs$ | async)?.length > 0">
-  <h1>Jobs</h1>
+  <h1>{{ userEmail ? "My Jobs" : "Jobs" }}</h1>
+
+  <a routerLink="/jobs/add" class="btn btn-warning" *ngIf="userEmail">Post Job</a>
+
+  <br>
   <table border="1">
     <thead>
       <tr>

@@ -49,6 +49,17 @@ export const getJobsFailure = createAction(
   '[General] Get Jobs Failure',
   props<{errorMessage: string}>()
 );
+export const getUserJobs = createAction(
+  '[General] Get User Jobs'
+);
+export const getUserJobsSuccess = createAction(
+  '[General] Get User Jobs Success',
+  props<{jobs: Job[]}>()
+);
+export const getUserJobsFailure = createAction(
+  '[General] Get User Jobs Failure',
+  props<{errorMessage: string}>()
+);
 export const updateJob = createAction(
   '[General] Update Job',
   props<Job>()
