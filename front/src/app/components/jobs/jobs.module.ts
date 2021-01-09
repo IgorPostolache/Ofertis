@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { JobComponent } from './job/job.component';
-import { JobsComponent } from './jobs/jobs.component';
-import { JobUpdateComponent } from './job-update/job-update.component';
+import { JobComponent } from './components/job/job.component';
+import { JobsComponent } from './components/jobs/jobs.component';
+import { JobUpdateComponent } from './components/job-update/job-update.component';
 import { RouterModule, Routes } from '@angular/router';
+import { JobService } from './service/job.service';
 
 const routes: Routes = [
   { path: 'job/:id', component: JobComponent},
@@ -28,6 +29,9 @@ const routes: Routes = [
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes)
+  ],
+  providers: [
+    JobService
   ]
 })
 export class JobsModule { }

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, Effect, ofType } from "@ngrx/effects";
 import { Observable, of } from "rxjs";
 import { catchError, exhaustMap, map, tap } from "rxjs/operators";
-import { JobService } from "../../services/job/job.service";
+import { JobService } from "../../service/job.service";
 import { addJob, addJobFailure, addJobSuccess, deleteJob, deleteJobFailure, deleteJobSuccess, getJob, getJobFailure, getJobs, getJobsFailure, getJobsSuccess, getJobSuccess, getUserJobs, getUserJobsFailure, getUserJobsSuccess, updateJob, updateJobFailure, updateJobSuccess } from "../actions/job.actions";
 import { Location } from '@angular/common';
 import { Job } from "src/app/shared/models/job/job.model";

@@ -16,7 +16,7 @@ import { ProfileEffects } from './core/store/effects/profile.effects';
 import { AuthInterceptor } from './components/auth/interceptor/auth.interceptor';
 import { AuthGuard } from './components/auth/guard/auth.guard';
 
-import { JobEffects } from './core/store/effects/job.effects';
+import { JobEffects } from './components/jobs/store/effects/job.effects';
 import { SpinnerInterceptor } from './core/interceptors/spinner.interceptor';
 
 import { AuthModule } from './components/auth/auth.module';

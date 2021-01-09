@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
-import { getJob } from 'src/app/core/store/actions/job.actions';
+import { getJob } from 'src/app/components/jobs/store/actions/job.actions';
 import { AppState, selectJobState } from 'src/app/core/store/app.states';
 import { Job } from 'src/app/shared/models/job/job';
 import { Location } from '@angular/common';

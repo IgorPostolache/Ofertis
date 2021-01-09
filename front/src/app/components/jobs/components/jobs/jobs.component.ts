@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { deleteJob, getJobs, getUserJobs } from 'src/app/core/store/actions/job.actions';
+import { deleteJob, getJobs, getUserJobs } from 'src/app/components/jobs/store/actions/job.actions';
 import { AppState, selectAllJobs, selectJobState } from 'src/app/core/store/app.states';
 import { Job } from 'src/app/shared/models/job/job';
 
