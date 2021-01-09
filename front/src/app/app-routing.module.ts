@@ -5,8 +5,6 @@ import { RegisterComponent } from './components/auth/register/register.component
 import { InputEmailComponent } from './components/auth/reset/input-email/input-email.component';
 import { ResetPasswordComponent } from './components/auth/reset/reset-password/reset-password.component';
 import { HomeComponent } from './components/home/home.component';
-import { JobUpdateComponent } from './components/jobs/job-update/job-update.component';
-import { JobComponent } from './components/jobs/job/job.component';
 import { AdminComponent } from './components/profiles/admin/admin.component';
 import { ModeratorComponent } from './components/profiles/moderator/moderator.component';
 import { ProfileComponent } from './components/profiles/profile/profile.component';
@@ -16,9 +14,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
 
-  { path: 'jobs/job/:id', component: JobComponent},
-  { path: 'jobs/add', component: JobUpdateComponent},
-  { path: 'jobs/update/:id', component: JobUpdateComponent},
+  { path: 'jobs', loadChildren: () => import('./components/jobs/jobs.module').then(m => m.JobsModule)},
 
   { path: 'login', component: LoginComponent },
 

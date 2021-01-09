@@ -33,6 +33,7 @@ import { AuthModule } from './components/auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JobsModule } from './components/jobs/jobs.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import { JobsModule } from './components/jobs/jobs.module';
     StoreModule.forRoot(reducers, {}),
     EffectsModule.forRoot([AuthEffects, JobEffects, PaymentEffects, ProfileEffects]),
     NgxStripeModule.forRoot('pk_test_51I1XH9KxGSTi9Lm0aA9ik8wjFfKL0oI4xR3iKg0z3BNmf0MGHp1WYnTYS7b0GMYRKFPf28TyFnYc0YtDleDyeDm100nIweVqz0'),
+    BrowserAnimationsModule,
     SharedModule,
     AuthModule,
     JobsModule
