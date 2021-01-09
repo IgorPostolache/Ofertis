@@ -23,7 +23,6 @@ import { ProfileComponent } from './components/profiles/profile/profile.componen
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { AuthGuard } from './core/guards/auth.guard';
 import { MillisToDatePipe } from './shared/misc/pipes/millis-to-date.pipe';
-import { NavBarComponent } from './components/navbar/navbar.component';
 import { JobsComponent } from './components/jobs/jobs/jobs.component';
 import { JobComponent } from './components/jobs/job/job.component';
 import { JobUpdateComponent } from './components/jobs/job-update/job-update.component';
@@ -48,7 +47,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
     UserVipComponent,
     ProfileComponent,
     MillisToDatePipe,
-    NavBarComponent,
     JobsComponent,
     JobComponent,
     JobUpdateComponent,
