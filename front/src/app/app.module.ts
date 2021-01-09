@@ -23,9 +23,6 @@ import { ProfileComponent } from './components/profiles/profile/profile.componen
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { AuthGuard } from './core/guards/auth.guard';
 import { MillisToDatePipe } from './shared/misc/pipes/millis-to-date.pipe';
-import { JobsComponent } from './components/jobs/jobs/jobs.component';
-import { JobComponent } from './components/jobs/job/job.component';
-import { JobUpdateComponent } from './components/jobs/job-update/job-update.component';
 import { JobEffects } from './core/store/effects/job.effects';
 import { SubscriptionUpdateComponent } from './components/payment/subscriptions/subscription-update/subscription-update.component';
 import { SubscriptionsListComponent } from './components/payment/subscriptions/subscriptions-list/subscriptions-list.component';
@@ -35,6 +32,7 @@ import { SpinnerInterceptor } from './core/interceptors/spinner.interceptor';
 import { AuthModule } from './components/auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JobsModule } from './components/jobs/jobs.module';
 
 
 @NgModule({
@@ -47,9 +45,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
     UserVipComponent,
     ProfileComponent,
     MillisToDatePipe,
-    JobsComponent,
-    JobComponent,
-    JobUpdateComponent,
     SubscriptionUpdateComponent,
     SubscriptionsListComponent,
     SubscriptionsComponent,
@@ -62,7 +57,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
     EffectsModule.forRoot([AuthEffects, JobEffects, PaymentEffects, ProfileEffects]),
     NgxStripeModule.forRoot('pk_test_51I1XH9KxGSTi9Lm0aA9ik8wjFfKL0oI4xR3iKg0z3BNmf0MGHp1WYnTYS7b0GMYRKFPf28TyFnYc0YtDleDyeDm100nIweVqz0'),
     SharedModule,
-    AuthModule
+    AuthModule,
+    JobsModule
 
   ],
   providers: [
