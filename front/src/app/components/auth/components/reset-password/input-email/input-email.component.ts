@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { AuthService } from 'src/app/components/auth/service/auth.service';
 import { User } from 'src/app/shared/models/user/user';
 import { Location } from '@angular/common';
 import { takeUntil } from 'rxjs/operators';

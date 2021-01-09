@@ -13,8 +13,8 @@ import { AuthEffects } from './core/store/effects/auth.effects';
 import { PaymentEffects } from './core/store/effects/payment.effects';
 import { ProfileEffects } from './core/store/effects/profile.effects';
 
-import { AuthInterceptor } from './core/interceptors/auth.interceptor';
-import { AuthGuard } from './core/guards/auth.guard';
+import { AuthInterceptor } from './components/auth/interceptor/auth.interceptor';
+import { AuthGuard } from './components/auth/guard/auth.guard';
 
 import { JobEffects } from './core/store/effects/job.effects';
 import { SpinnerInterceptor } from './core/interceptors/spinner.interceptor';

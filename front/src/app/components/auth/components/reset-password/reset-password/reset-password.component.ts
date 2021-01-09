@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { AuthService } from 'src/app/components/auth/service/auth.service';
 import { checkPasswordStrength } from 'src/app/shared/misc/functions/checkPasswordStrength';
 import { User } from 'src/app/shared/models/user/user';
 

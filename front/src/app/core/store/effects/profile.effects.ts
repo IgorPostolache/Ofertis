@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { Actions, createEffect, Effect, ofType } from "@ngrx/effects";
 import { Observable, of } from "rxjs";
 import { catchError, exhaustMap, map, tap } from "rxjs/operators";
-import { AuthService } from "../../services/auth/auth.service";
+import { AuthService } from "../../../components/auth/service/auth.service";
 import { adminProfile, adminProfileFailure, adminProfileSuccess, moderatorProfile, moderatorProfileFailure, moderatorProfileSuccess, redirectProfile, userProfile, userProfileFailure, userProfileSuccess, userVipProfile, userVipProfileFailure, userVipProfileSuccess } from "../actions/profile.actions";
 
 @Injectable()

@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable, of, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { AuthService } from "src/app/core/services/auth/auth.service";
+import { AuthService } from "src/app/components/auth/service/auth.service";
 import {Location} from '@angular/common';
 
 @Injectable()
