@@ -5,6 +5,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { NavBarComponent } from './components/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
+import { MillisToDatePipe } from './misc/pipes/millis-to-date.pipe';
 
 
 
@@ -12,6 +13,7 @@ import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [
     LoadingSpinnerComponent,
+    MillisToDatePipe,
     NavBarComponent
   ],
   imports: [
@@ -24,6 +26,7 @@ import { RouterModule } from '@angular/router';
 
   exports: [
     LoadingSpinnerComponent,
+    MillisToDatePipe,
     NavBarComponent,
     CommonModule,
     FormsModule,
