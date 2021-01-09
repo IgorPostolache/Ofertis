@@ -4,10 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
-import { LoginComponent } from './components/auth/login/login.component';
-import { RegisterComponent } from './components/auth/register/register.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
 import { StoreModule } from '@ngrx/store';
 import { NgxStripeModule } from 'ngx-stripe';
 import { reducers } from './core/store/app.states';
@@ -34,20 +31,17 @@ import { JobEffects } from './core/store/effects/job.effects';
 import { SubscriptionUpdateComponent } from './components/payment/subscriptions/subscription-update/subscription-update.component';
 import { SubscriptionsListComponent } from './components/payment/subscriptions/subscriptions-list/subscriptions-list.component';
 import { SubscriptionsComponent } from './components/payment/subscriptions/subscriptions.component';
-import { InputEmailComponent } from './components/auth/reset/input-email/input-email.component';
-import { ResetPasswordComponent } from './components/auth/reset/reset-password/reset-password.component';
 import { SpinnerInterceptor } from './core/interceptors/spinner.interceptor';
-import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
+import { AuthModule } from './components/auth/auth.module';
+import { SharedModule } from './shared/shared.module';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginComponent,
-    RegisterComponent,
     UserComponent,
     ModeratorComponent,
     AdminComponent,
@@ -61,21 +55,16 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     SubscriptionUpdateComponent,
     SubscriptionsListComponent,
     SubscriptionsComponent,
-    InputEmailComponent,
-    ResetPasswordComponent,
-    LoadingSpinnerComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, {}),
     EffectsModule.forRoot([AuthEffects, JobEffects, PaymentEffects, ProfileEffects]),
     NgxStripeModule.forRoot('pk_test_51I1XH9KxGSTi9Lm0aA9ik8wjFfKL0oI4xR3iKg0z3BNmf0MGHp1WYnTYS7b0GMYRKFPf28TyFnYc0YtDleDyeDm100nIweVqz0'),
-    BrowserAnimationsModule,
-    MatProgressSpinnerModule
+    SharedModule,
+    AuthModule
 
   ],
   providers: [
