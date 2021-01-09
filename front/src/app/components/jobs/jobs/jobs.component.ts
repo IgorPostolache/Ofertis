@@ -31,7 +31,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     if (this.showMyJobs && this.userEmail) {
       this.jobs$.pipe(takeUntil(this.destroy))
       .subscribe(job => {
-        if (job.length == 0) this._store.dispatch(getUserJobs());
+        if (job.length == 0 || this.showUserJobs) this._store.dispatch(getUserJobs());
       })
     } else {
       this.jobs$.pipe(takeUntil(this.destroy))
