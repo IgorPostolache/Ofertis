@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { redirectProfile } from 'src/app/core/store/actions/profile.actions';
+import { redirectProfile } from 'src/app/components/profiles/store/actions/profile.actions';
 import { AppState } from 'src/app/core/store/app.states';
 
 @Component({

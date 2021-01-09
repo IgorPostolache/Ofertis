@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
-import { userVipProfile } from 'src/app/core/store/actions/profile.actions';
+import { userVipProfile } from 'src/app/components/profiles/store/actions/profile.actions';
 import { AppState, selectProfileState } from 'src/app/core/store/app.states';
 import { takeUntil } from 'rxjs/operators';
 import { CustomerSub } from 'src/app/shared/models/customer/customer';

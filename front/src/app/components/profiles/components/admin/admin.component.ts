@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { adminProfile } from 'src/app/core/store/actions/profile.actions';
+import { adminProfile } from 'src/app/components/profiles/store/actions/profile.actions';
 import { AppState, selectProfileState } from 'src/app/core/store/app.states';
 
 @Component({

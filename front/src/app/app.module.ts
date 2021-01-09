@@ -11,7 +11,7 @@ import { reducers } from './core/store/app.states';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './components/auth/store/effects/auth.effects';
 import { PaymentEffects } from './components/payment/components/subscription/store/effects/payment.subscription.effects';
-import { ProfileEffects } from './core/store/effects/profile.effects';
+import { ProfileEffects } from './components/profiles/store/effects/profile.effects';
 
 import { AuthInterceptor } from './components/auth/interceptor/auth.interceptor';
 import { AuthGuard } from './components/auth/guard/auth.guard';
