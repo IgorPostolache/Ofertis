@@ -9,7 +9,7 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class PaymentService {
+export class PaymentSubscriptionService {
   constructor(private http: HttpClient) { }
 
   createSub(customer){

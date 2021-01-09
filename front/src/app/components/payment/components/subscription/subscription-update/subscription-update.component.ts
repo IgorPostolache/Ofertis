@@ -6,7 +6,7 @@ import { StripeCardComponent, StripeService } from 'ngx-stripe';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SpinnerService } from 'src/app/core/services/spinner/spinner.service';
-import { subscribeStripe, subscribeStripeFailure } from 'src/app/core/store/actions/payment.actions';
+import { subscribeStripe, subscribeStripeFailure } from 'src/app/components/payment/components/subscription/store/actions/payment.subscription.actions';
 import { AppState, selectProfileState } from 'src/app/core/store/app.states';
 
 @Component({

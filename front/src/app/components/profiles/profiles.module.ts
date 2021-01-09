@@ -8,7 +8,7 @@ import { AdminComponent } from './admin/admin.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { JobsModule } from '../jobs/jobs.module';
-import { SubscriptionsModule } from '../payment/subscriptions/subscriptions.module';
+import { SubscriptionsModule } from '../payment/components/subscription/subscriptions.module';
 
 const routes: Routes = [
   { path: 'user', component: UserComponent },

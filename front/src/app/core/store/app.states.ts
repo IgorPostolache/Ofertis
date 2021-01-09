@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import * as auth from '../../components/auth/store/reducer/auth.reducers';
 import * as job from '../../components/jobs/store/reducer/job.reducers';
-import * as payment from './reducers/payment.reducers';
+import * as payment from '../../components/payment/components/subscription/store/reducer/payment.subscription.reducers';
 import * as profile from './reducers/profile.reducers';
 
 

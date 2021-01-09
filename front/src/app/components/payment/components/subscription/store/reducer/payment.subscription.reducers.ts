@@ -1,5 +1,5 @@
 import { createReducer, on, Action } from "@ngrx/store";
-import * as paymentActions from './../actions/payment.actions';
+import * as paymentActions from '../actions/payment.subscription.actions';
 
 export const paymentFeatureName = 'payment';
 

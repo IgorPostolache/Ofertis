@@ -10,7 +10,7 @@ import { reducers } from './core/store/app.states';
 
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './components/auth/store/effects/auth.effects';
-import { PaymentEffects } from './core/store/effects/payment.effects';
+import { PaymentEffects } from './components/payment/components/subscription/store/effects/payment.subscription.effects';
 import { ProfileEffects } from './core/store/effects/profile.effects';
 
 import { AuthInterceptor } from './components/auth/interceptor/auth.interceptor';
@@ -25,7 +25,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JobsModule } from './components/jobs/jobs.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProfilesModule } from './components/profiles/profiles.module';
-import { SubscriptionsModule } from './components/payment/subscriptions/subscriptions.module';
+import { SubscriptionsModule } from './components/payment/components/subscription/subscriptions.module';
 
 
 @NgModule({

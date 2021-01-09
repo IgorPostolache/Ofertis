@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { getStripeSubs } from 'src/app/core/store/actions/payment.actions';
+import { getStripeSubs } from 'src/app/components/payment/components/subscription/store/actions/payment.subscription.actions';
 import { AppState, selectPaymentState } from 'src/app/core/store/app.states';
 import { CustomerSub } from 'src/app/shared/models/customer/customer';
 

@@ -2,21 +2,21 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, Effect, ofType } from "@ngrx/effects";
 import { Observable, of } from "rxjs";
 import { catchError, exhaustMap, map, tap } from "rxjs/operators";
-import { PaymentService } from "../../services/payment/payment.service";
-import { getStripeSubs, getStripeSubsFailure, getStripeSubsSuccess, subscribeStripe, subscribeStripeFailure, subscribeStripeSuccess } from "../actions/payment.actions";
+import { PaymentSubscriptionService } from "../../service/payment.service";
+import { getStripeSubs, getStripeSubsFailure, getStripeSubsSuccess, subscribeStripe, subscribeStripeFailure, subscribeStripeSuccess } from "../actions/payment.subscription.actions";
 
 @Injectable()
 export class PaymentEffects {
   constructor(
     private action$: Actions,
-    private paymetSrv: PaymentService
+    private paymetSubSrv: PaymentSubscriptionService
   ) {}
 
   subscribe$ = createEffect(() =>
     this.action$.pipe(
       ofType(subscribeStripe),
       exhaustMap(payload =>
-        this.paymetSrv.createSub(payload).pipe(
+        this.paymetSubSrv.createSub(payload).pipe(
           map((res: any) => {
             return subscribeStripeSuccess({
               customer_id: res.customer_id,
@@ -47,7 +47,7 @@ export class PaymentEffects {
     this.action$.pipe(
       ofType(getStripeSubs),
       exhaustMap(payload =>
-        this.paymetSrv.getSubs(payload).pipe(
+        this.paymetSubSrv.getSubs(payload).pipe(
           map(subscriptions => {
             return getStripeSubsSuccess({subscriptions})
           }),

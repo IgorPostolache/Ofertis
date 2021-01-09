@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { PaymentService } from 'src/app/core/services/payment/payment.service';
-import { cancelSubStripe } from 'src/app/core/store/actions/payment.actions';
+import { PaymentSubscriptionService } from 'src/app/components/payment/components/subscription/service/payment.service';
+import { cancelSubStripe } from 'src/app/components/payment/components/subscription/store/actions/payment.subscription.actions';
 import { AppState, selectPaymentState } from 'src/app/core/store/app.states';
 import { CustomerSub } from 'src/app/shared/models/customer/customer';
 
@@ -20,7 +20,7 @@ export class SubscriptionsListComponent implements OnInit, OnDestroy {
 
   constructor(
     private _store: Store<AppState>,
-    private paymetSvc: PaymentService
+    private paymetSubSvc: PaymentSubscriptionService
   ) { }
 
   ngOnInit(): void {
@@ -44,7 +44,7 @@ export class SubscriptionsListComponent implements OnInit, OnDestroy {
 
   cancelSub(id): void {
     if(confirm("Are you sure that you want to cancel this subscription?")) {
-      this.paymetSvc.cancelSub({id: id}).pipe(takeUntil(this.destroy)).subscribe();
+      this.paymetSubSvc.cancelSub({id: id}).pipe(takeUntil(this.destroy)).subscribe();
       this._store.dispatch(cancelSubStripe());
     }
   }
