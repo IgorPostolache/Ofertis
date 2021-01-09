@@ -9,7 +9,7 @@ import { StoreModule } from '@ngrx/store';
 import { reducers } from './core/store/app.states';
 
 import { EffectsModule } from '@ngrx/effects';
-import { AuthEffects } from './core/store/effects/auth.effects';
+import { AuthEffects } from './components/auth/store/effects/auth.effects';
 import { PaymentEffects } from './core/store/effects/payment.effects';
 import { ProfileEffects } from './core/store/effects/profile.effects';
 

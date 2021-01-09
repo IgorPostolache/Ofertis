@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { AppState, selectAuthState } from 'src/app/core/store/app.states';
 import { User } from 'src/app/shared/models/user/user';
-import { login } from 'src/app/core/store/actions/auth.actions';
+import { login } from 'src/app/components/auth/store/actions/auth.actions';
 import { takeUntil } from 'rxjs/operators';
 import { SpinnerService } from 'src/app/core/services/spinner/spinner.service';
 

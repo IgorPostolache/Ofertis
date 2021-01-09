@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SpinnerService } from 'src/app/core/services/spinner/spinner.service';
-import { register } from 'src/app/core/store/actions/auth.actions';
+import { register } from 'src/app/components/auth/store/actions/auth.actions';
 import { AppState, selectAuthState } from 'src/app/core/store/app.states';
 import { checkPasswordStrength } from 'src/app/shared/misc/functions/checkPasswordStrength';
 import { User } from 'src/app/shared/models/user/user';

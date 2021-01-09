@@ -3,8 +3,8 @@ import { Router } from "@angular/router";
 import { Actions, createEffect, Effect, ofType } from "@ngrx/effects";
 import { Observable, of } from "rxjs";
 import { map, exhaustMap, catchError, tap} from "rxjs/operators";
-import { AuthService } from "../../../components/auth/service/auth.service";
-import { login, loginFailure, loginSuccess, logout, register, registerFailure, registerSuccess } from "./../actions/auth.actions";
+import { AuthService } from "../../service/auth.service";
+import { login, loginFailure, loginSuccess, logout, register, registerFailure, registerSuccess } from "../actions/auth.actions";
 
 @Injectable()
 export class AuthEffects {
