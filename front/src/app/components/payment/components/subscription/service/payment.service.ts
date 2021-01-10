@@ -1,7 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PaymentSub } from '../model/payment.subscription';
 
-const PAYMENT_API = 'http://localhost:8080/api/payment/';
+const SUBSCRIPTION_API = 'http://localhost:8080/api/subscriptions/';
 const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -13,12 +15,12 @@ export class PaymentSubscriptionService {
   constructor(private http: HttpClient) { }
 
   createSub(customer){
-    return this.http.post(PAYMENT_API + "subscription/create", customer, httpOptions);
+    return this.http.post(SUBSCRIPTION_API + "add", customer, httpOptions);
   }
-  getSubs(customer){
-    return this.http.post(PAYMENT_API + "subscription/list", customer, httpOptions);
+  getUserSubs(): Observable<PaymentSub[]>{
+    return this.http.get<PaymentSub[]>(SUBSCRIPTION_API);
   }
   cancelSub(subId){
-    return this.http.post(PAYMENT_API + "subscription/cancel", subId, httpOptions);
+    return this.http.post(SUBSCRIPTION_API + "delete", subId, httpOptions);
   }
 }

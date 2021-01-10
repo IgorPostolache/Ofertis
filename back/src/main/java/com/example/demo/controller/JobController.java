@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.Job;
-import com.example.demo.model.Service;
+import com.example.demo.model.Subscription;
 import com.example.demo.model.User;
 import com.example.demo.payload.response.ApiResponse;
-import com.example.demo.repository.ServiceRepository;
+import com.example.demo.repository.SubscriptionRepository;
 import com.example.demo.security.JwtProvider;
 import com.example.demo.service.JobService;
 
@@ -37,7 +37,7 @@ public class JobController {
 	JwtProvider jwtProvider;
 	
 	@Autowired
-	ServiceRepository serviceRepository;
+	SubscriptionRepository serviceRepository;
 	
 	@GetMapping
 	public List<Job> getAllJobs() {
@@ -67,7 +67,7 @@ public class JobController {
 	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public ResponseEntity<?> addJob(@Valid @RequestBody Job job, HttpServletRequest req) {
 		User user = jwtProvider.getUserFromAuthorizationHeader(req);
-		Service service = serviceRepository.findByIdOrUserId(user.getId(), user.getId())
+		Subscription service = serviceRepository.findByIdOrUserId(user.getId(), user.getId())
 				.orElseThrow(() -> new BadRequestException("No active subscription was found for the current user. Please chose a subscription and subscribe again."));
 		job.setUser(user);
 		jobService.save(job);
@@ -78,7 +78,7 @@ public class JobController {
 	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public ResponseEntity<?> updateJob(@Valid @RequestBody Job jobReq, HttpServletRequest req) {
 		User user = jwtProvider.getUserFromAuthorizationHeader(req);
-		Service service = serviceRepository.findByIdOrUserId(user.getId(), user.getId())
+		Subscription service = serviceRepository.findByIdOrUserId(user.getId(), user.getId())
 				.orElseThrow(() -> new BadRequestException("No active subscription was found for the current user. Please chose a subscription and subscribe again."));
 		
 		if (jobReq.getId() == null) return new ResponseEntity(new BadRequestException("Job id must be provided"), HttpStatus.BAD_REQUEST);
@@ -94,7 +94,7 @@ public class JobController {
 	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public ResponseEntity<?> deleteJob(@PathVariable Long id, HttpServletRequest req) {
 		User user = jwtProvider.getUserFromAuthorizationHeader(req);
-		Service service = serviceRepository.findByIdOrUserId(user.getId(), user.getId())
+		Subscription service = serviceRepository.findByIdOrUserId(user.getId(), user.getId())
 				.orElseThrow(() -> new BadRequestException("No active subscription was found for the current user. Please chose a subscription and subscribe again."));
 		
 		Job job = jobService.loadById(id).orElseThrow(

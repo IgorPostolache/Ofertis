@@ -1,5 +1,6 @@
 package com.example.demo.exception;
 
+import java.io.IOException;
 import java.util.Date;
 
 import org.springframework.http.HttpStatus;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -28,4 +30,14 @@ public class GlobalExceptionHandler {
 		ErrorDetails errorDetails = new ErrorDetails(req.getDescription(false), ex.getMessage(),new Date());
 		return new ResponseEntity(errorDetails, HttpStatus.NOT_FOUND);
 	}
+	/*
+	@ExceptionHandler(IOException.class)
+    public ResponseEntity<?> abortedConnection(IOException ex, WebRequest req) {
+        if (ex.getClass().getName().equals("org.apache.catalina.connector.ClientAbortException"))
+        	return null;
+        
+        ErrorDetails errorDetails = new ErrorDetails(req.getDescription(false), ex.getMessage(),new Date());
+		return new ResponseEntity(errorDetails, HttpStatus.CONFLICT);
+    }
+    */
 }

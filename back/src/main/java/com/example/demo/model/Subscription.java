@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -14,10 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import com.example.demo.enums.ServiceName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,9 +27,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "services")
-@Getter @Setter @NoArgsConstructor @RequiredArgsConstructor @ToString
-public class Service {
+@Table(name = "subscriptions")
+@Getter @Setter @NoArgsConstructor @ToString
+public class Subscription {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -38,23 +38,40 @@ public class Service {
 	@Column(length = 50)
 	@NonNull private ServiceName name;
 	
-	@NonNull private String customerId;
+	@Column(name="starts")
+	private LocalDateTime starts;
+	
+	@Column(name="ends")
+	private LocalDateTime ends;
+	
+	@Column(name="renews")
+	private boolean renews = true;
+	
 	@NonNull private String subscriptionId;
+	@NonNull private String customerId;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+	@JsonIgnore
     private User user;
+	
+	public Subscription(@NonNull ServiceName name, @NonNull String customerId, @NonNull String subscriptionId) {
+		this.name = name;
+		this.customerId = customerId;
+		this.subscriptionId = subscriptionId;
+	}
 	
 	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Service service = (Service) o;
-        return Objects.equals(id, service.id);
+        Subscription sub = (Subscription) o;
+        return Objects.equals(id, sub.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

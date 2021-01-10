@@ -67,9 +67,9 @@ public class User extends DateAudit{
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
-    private List<Service> services = new ArrayList<>();
+    private List<Subscription> services = new ArrayList<>();
 	
-	public void addService(Service service) {
+	public void addService(Subscription service) {
         services.add(service);
         service.setUser(this);
     }

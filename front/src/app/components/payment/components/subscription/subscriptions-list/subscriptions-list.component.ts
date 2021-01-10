@@ -44,8 +44,12 @@ export class SubscriptionsListComponent implements OnInit, OnDestroy {
 
   cancelSub(id): void {
     if(confirm("Are you sure that you want to cancel this subscription?")) {
-      this.paymetSubSvc.cancelSub({id: id}).pipe(takeUntil(this.destroy)).subscribe();
-      this._store.dispatch(cancelSubStripe());
+      this.paymetSubSvc.cancelSub({id: id})
+        .pipe(takeUntil(this.destroy))
+        .subscribe(() => {
+          this._store.dispatch(cancelSubStripe());
+        }, err => console.log(err));
+
     }
   }
 }
