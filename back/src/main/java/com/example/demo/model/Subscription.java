@@ -44,6 +44,12 @@ public class Subscription {
 	@Column(name="ends")
 	private LocalDateTime ends;
 	
+	@Column(name="period")
+	private String period;
+	
+	@Column(name="price")
+	private int price;
+	
 	@Column(name="renews")
 	private boolean renews = true;
 	

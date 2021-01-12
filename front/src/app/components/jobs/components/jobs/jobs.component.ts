@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -13,33 +13,35 @@ import { Job } from 'src/app/shared/models/job/job';
 })
 export class JobsComponent implements OnInit, OnDestroy {
   private destroy: Subject<boolean> = new Subject<boolean>();
-  @Input() userEmail: string;
+  getJobs: boolean;
+  @Input() private getJobsEEC: EventEmitter<boolean>;
   jobs$: Observable<Job[]>
   jobState$: Observable<any>;
   @Input() showMyJobs: boolean;
   showUserJobs: boolean;
+  @Input() userEmail: string;
 
   constructor(private _store: Store<AppState>) {
     this.jobState$ = this._store.select(selectJobState);
+    this.jobs$ = this._store.select(selectAllJobs);
   }
 
   ngOnInit(): void {
     this.jobState$
       .pipe(takeUntil(this.destroy))
       .subscribe((res) => this.showUserJobs = res.showUserJobs);
-    this.jobs$ = this._store.select(selectAllJobs);
-    if (this.showMyJobs && this.userEmail) {
-      this.jobs$.pipe(takeUntil(this.destroy))
-      .subscribe(job => {
-        if (job.length == 0 || this.showUserJobs) this._store.dispatch(getUserJobs());
+    if (this.getJobsEEC) {
+      this.getJobsEEC.pipe(takeUntil(this.destroy)).subscribe(() => {
+        if (this.showMyJobs && this.userEmail) {
+          this.jobs$.pipe(takeUntil(this.destroy))
+            .subscribe(job => {
+              if (job.length == 0 || this.showUserJobs) this._store.dispatch(getUserJobs());})
+        }
       })
     } else {
-      this.jobs$.pipe(takeUntil(this.destroy))
-      .subscribe(job => {
-        if (job.length == 0 || !this.showUserJobs) this._store.dispatch(getJobs());
-      })
-    }
-
+        this.jobs$.pipe(takeUntil(this.destroy))
+          .subscribe(job => { if (job.length == 0 || !this.showUserJobs) this._store.dispatch(getJobs());})
+        };
   }
 
   ngOnDestroy(): void {

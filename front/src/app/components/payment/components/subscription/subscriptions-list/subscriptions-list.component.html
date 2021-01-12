@@ -1,26 +1,26 @@
 <br>
 <br>
-<table border="1">
+<table border="1" *ngIf="subs">
   <thead>
     <tr>
       <th>Name</th>
       <th>Started</th>
       <th>Ends</th>
-      <td>Interval</td>
-      <td>Price</td>
-      <td>Status</td>
+      <th>Interval</th>
+      <th>Price</th>
+      <th>Status</th>
       <th>Cancel</th>
     </tr>
   </thead>
-  <tbody *ngIf="subList.length > 0">
-    <tr *ngFor="let sub of subList">
-      <td>{{ customerSub.subscription_name }}</td>
-      <td>{{ sub.currentPeriodStart | millisToDate }}</td>
-      <td>{{ sub.currentPeriodEnd | millisToDate }}</td>
-      <td>{{ sub.items.data[0].plan.interval }}</td>
-      <td>{{ sub.items.data[0].plan.amount / 100 }} {{ sub.items.data[0].plan.currency }}</td>
-      <td>{{ sub.items.cancelAt == null ? 'Active' : 'Canceled' }}</td>
-      <td><button class="btn btn-danger" (click)="cancelSub(sub.id)">X</button></td>
+  <tbody>
+    <tr *ngFor="let sub of subs">
+      <td>{{ sub.name }}</td>
+      <td>{{ sub.starts | date: 'short' }}</td>
+      <td>{{ sub.ends | date: 'short' }}</td>
+      <td>{{ sub.period }}</td>
+      <td>{{ sub.price }} €</td>
+      <td>{{ sub.renews ? 'Active' : 'Canceled' }}</td>
+      <td><button class="btn btn-danger" (click)="cancelSub(sub.subscriptionId)" *ngIf="sub.renews">X</button></td>
     </tr>
   </tbody>
 </table>

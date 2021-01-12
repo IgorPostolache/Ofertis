@@ -2,10 +2,10 @@
 <div class="container-fluid">
   {{ user_vip }}
   <br>
-  <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#manage-jobs">Manage
+  <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#manage-jobs" (click)="getJobs()">Manage
     Jobs</button>
   <div id="manage-jobs" class="collapse">
-    <app-jobs [showMyJobs]="true" [userEmail]="email"></app-jobs>
+    <app-jobs [showMyJobs]="true" [userEmail]="email" [getJobsEEC]="getJobsEEP"></app-jobs>
   </div>
   <br>
   <app-subscriptions></app-subscriptions>

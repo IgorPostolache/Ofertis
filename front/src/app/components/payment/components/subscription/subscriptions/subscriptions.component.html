@@ -3,12 +3,17 @@
 <div id="manage-subs" class="collapse">
   <h1>Subscriptions</h1>
 
-  <div class="alert alert-success alert-dismissible fade show" *ngIf="customerSub.subscription_message">
-    {{ customerSub.subscription_message }}
+  <div class="alert alert-warning alert-dismissible fade show" *ngIf="timeLeft">
+    {{ timeLeft }}
     <button type="button" class="close" data-dismiss="alert">&times;</button>
   </div>
 
-  <div *ngIf="!customerSub.subscription_id">
+  <div class="alert alert-success alert-dismissible fade show" *ngIf="message">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div>
+
+  <div>
     <button type="button" class="btn btn-warning" data-toggle="collapse" data-target="#create-sub">Create
       Subscription</button>
     <div id="create-sub" class="collapse">
@@ -18,7 +23,7 @@
     <hr>
   </div>
 
-  <div *ngIf="customerSub.subscription_id">
+  <div>
     <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#show-subs" (click)="showSubs()">
       Current Subscriptions
     </button>

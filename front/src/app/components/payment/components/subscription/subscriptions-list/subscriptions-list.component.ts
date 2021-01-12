@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { PaymentSubscriptionService } from 'src/app/components/payment/components/subscription/service/payment.service';
 import { cancelSubStripe } from 'src/app/components/payment/components/subscription/store/actions/payment.subscription.actions';
-import { AppState, selectPaymentState } from 'src/app/core/store/app.states';
-import { CustomerSub } from 'src/app/shared/models/customer/customer';
+import { AppState, selectAllSubs } from 'src/app/core/store/app.states';
+import { PaymentSub } from '../model/payment.subscription';
+
 
 @Component({
   selector: 'app-subscriptions-list',
@@ -13,28 +13,15 @@ import { CustomerSub } from 'src/app/shared/models/customer/customer';
   styleUrls: ['./subscriptions-list.component.css']
 })
 export class SubscriptionsListComponent implements OnInit, OnDestroy {
-  customerSub: CustomerSub = new CustomerSub();
   private destroy: Subject<boolean> = new Subject<boolean>();
   errorMessage: string;
-  subList: any = [];
+  subs: PaymentSub[];
 
-  constructor(
-    private _store: Store<AppState>,
-    private paymetSubSvc: PaymentSubscriptionService
-  ) { }
+  constructor(private _store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this._store.select(selectPaymentState).pipe(takeUntil(this.destroy))
-      .subscribe(
-        (data: any) => {
-          this.customerSub.customer_id = data.customer_id;
-          this.customerSub.subscription_id = data.subscription_id;
-          this.customerSub.subscription_message = data.subscription_message;
-          this.customerSub.subscription_name = data.subscription_name;
-          this.subList = data.subscriptions;
-        },
-        err => this.errorMessage = err.errorMessage
-      );
+    this._store.select(selectAllSubs).pipe(takeUntil(this.destroy))
+      .subscribe(subs => this.subs = subs), err => this.errorMessage = err.errorMessage;
   }
 
   ngOnDestroy(): void {
@@ -43,13 +30,7 @@ export class SubscriptionsListComponent implements OnInit, OnDestroy {
   }
 
   cancelSub(id): void {
-    if(confirm("Are you sure that you want to cancel this subscription?")) {
-      this.paymetSubSvc.cancelSub({id: id})
-        .pipe(takeUntil(this.destroy))
-        .subscribe(() => {
-          this._store.dispatch(cancelSubStripe());
-        }, err => console.log(err));
-
-    }
+    if(confirm("Are you sure that you want to cancel this subscription?"))
+      this._store.dispatch(cancelSubStripe({id: id}));
   }
 }

@@ -2,8 +2,9 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, Effect, ofType } from "@ngrx/effects";
 import { Observable, of } from "rxjs";
 import { catchError, exhaustMap, map, tap } from "rxjs/operators";
+import { PaymentSub } from "../../model/payment.subscription";
 import { PaymentSubscriptionService } from "../../service/payment.service";
-import { getStripeSubs, getStripeSubsFailure, getStripeSubsSuccess, subscribeStripe, subscribeStripeFailure, subscribeStripeSuccess } from "../actions/payment.subscription.actions";
+import { cancelSubStripe, cancelSubStripeFailure, cancelSubStripeSuccess, getStripeSubs, getStripeSubsFailure, getStripeSubsSuccess, subscribeStripe, subscribeStripeFailure, subscribeStripeSuccess } from "../actions/payment.subscription.actions";
 
 @Injectable()
 export class PaymentEffects {
@@ -12,17 +13,39 @@ export class PaymentEffects {
     private paymetSubSrv: PaymentSubscriptionService
   ) {}
 
+  cancelSubscribe$ = createEffect(() =>
+    this.action$.pipe(
+      ofType(cancelSubStripe),
+      exhaustMap(id =>
+        this.paymetSubSrv.cancelSub(id).pipe(
+          map( (res: any) => {
+          return cancelSubStripeSuccess({update: {id: res.id, changes: res}});
+          }),
+          catchError(err => {
+            return of(cancelSubStripeFailure({errorMessage: err.error.message}))
+          })
+        )
+      )
+    )
+  );
+  @Effect({ dispatch: false })
+  cancelSubscribeSucces$: Observable<any> = this.action$.pipe(
+    ofType(cancelSubStripeSuccess),
+    tap(res => console.log(res))
+  );
+  @Effect({ dispatch: false })
+  cancelSubscribeFailure$: Observable<any> = this.action$.pipe(
+    ofType(cancelSubStripeFailure),
+    tap(err => console.log(err))
+  );
+
   subscribe$ = createEffect(() =>
     this.action$.pipe(
       ofType(subscribeStripe),
       exhaustMap(payload =>
         this.paymetSubSrv.createSub(payload).pipe(
-          map((res: any) => {
-            return subscribeStripeSuccess({
-              customer_id: res.customer_id,
-              subscription_id: res.subscription_id,
-              subscription_name: res.subscription_name
-            })
+          map((sub: PaymentSub) => {
+            return subscribeStripeSuccess({sub: sub})
           }),
           catchError(err =>
             of(subscribeStripeFailure({errorMessage: err.error.message}))
@@ -46,10 +69,10 @@ export class PaymentEffects {
   getSubscriptions$ = createEffect(() =>
     this.action$.pipe(
       ofType(getStripeSubs),
-      exhaustMap(payload =>
-        this.paymetSubSrv.getSubs(payload).pipe(
-          map(subscriptions => {
-            return getStripeSubsSuccess({subscriptions})
+      exhaustMap(() =>
+        this.paymetSubSrv.getUserSubs().pipe(
+          map((subs: PaymentSub[]) => {
+            return getStripeSubsSuccess({subs})
           }),
           catchError(err =>
             of(getStripeSubsFailure({errorMessage: err.error.message}))
@@ -61,7 +84,7 @@ export class PaymentEffects {
   @Effect({ dispatch: false })
   getSubscriptionsSucces$: Observable<any> = this.action$.pipe(
     ofType(getStripeSubsSuccess),
-    tap(res => console.log(res))
+    //tap(res => console.log(res))
   )
 
   @Effect({ dispatch: false })
