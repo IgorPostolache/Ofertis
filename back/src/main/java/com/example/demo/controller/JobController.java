@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.Job;
 import com.example.demo.model.Subscription;
 import com.example.demo.model.User;
+import com.example.demo.payload.request.JobRequest;
 import com.example.demo.payload.response.ApiResponse;
 import com.example.demo.repository.SubscriptionRepository;
 import com.example.demo.security.JwtProvider;
@@ -45,61 +47,66 @@ public class JobController {
 	}
 	
 	@GetMapping("{id}")
-	public Job getJob(@PathVariable Long id) {
+	public Job getJob(@PathVariable String id) {
 		return jobService.loadById(id).orElseThrow(
 				() -> new BadRequestException("No job found by id " + id));
 	}
-	
-	@GetMapping("/user/{id}")
-	public ResponseEntity<?> getAllUserJobs(@PathVariable Long id) {
-		List<Job> jobs = jobService.loadByUserId(id);
-		return ResponseEntity.ok(jobs);
+	// FIX AT LATER POINT WHEN IMPLEMENTING USER_VIP PROFILE
+	/*
+	@GetMapping("/user/{user_id}")
+	public List<Job> getAllUserJobs(@PathVariable String user_id) {
+		return jobService.loadAllByUserId(user_id);
 	}
 	
 	@GetMapping("/user")
 	public ResponseEntity<?> getAllUserJobs(HttpServletRequest req) {
-		long id = jwtProvider.getUserFromAuthorizationHeader(req).getId();
-		List<Job> jobs = jobService.loadByUserId(id);
+		Long user_id = jwtProvider.getUserFromAuthorizationHeader(req).getId();
+		List<Job> jobs = jobService.loadAllByUserId(Long.toString(user_id));
 		return ResponseEntity.ok(jobs);
 	}
+	*/
 	
 	@PostMapping
 	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public ResponseEntity<?> addJob(@Valid @RequestBody Job job, HttpServletRequest req) {
 		User user = jwtProvider.getUserFromAuthorizationHeader(req);
 		Subscription service = serviceRepository.findByIdOrUserId(user.getId(), user.getId())
-				.orElseThrow(() -> new BadRequestException("No active subscription was found for the current user. Please chose a subscription and subscribe again."));
-		job.setUser(user);
-		jobService.save(job);
+				.orElseThrow(() -> new BadRequestException("You need to have an active subscription in order to post a job."));
+		
+		job.setCreated_at(new Date());
+		job.setUpdated_at(new Date());
+		job.setUser_id(Long.toString(user.getId()));
+		jobService.add(job);
+		
 		return new ResponseEntity(job, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
 	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
 	public ResponseEntity<?> updateJob(@Valid @RequestBody Job jobReq, HttpServletRequest req) {
+		
 		User user = jwtProvider.getUserFromAuthorizationHeader(req);
 		Subscription service = serviceRepository.findByIdOrUserId(user.getId(), user.getId())
-				.orElseThrow(() -> new BadRequestException("No active subscription was found for the current user. Please chose a subscription and subscribe again."));
-		
-		if (jobReq.getId() == null) return new ResponseEntity(new BadRequestException("Job id must be provided"), HttpStatus.BAD_REQUEST);
-		Job job = jobService.loadById(jobReq.getId()).orElseThrow(
-				() -> new BadRequestException("No job found by id " + jobReq.getId()));
-		
-		job.setName(jobReq.getName());
-		jobService.save(job);
-		return ResponseEntity.ok(job);
+				.orElseThrow(() -> new BadRequestException("You need to have an active subscription in order to update a job."));
+			
+		jobService.update(jobReq);
+		return ResponseEntity.ok(jobReq);
 	}
 	
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasRole('USER_VIP') or hasRole('ADMIN') or hasRole('MODERATOR')")
-	public ResponseEntity<?> deleteJob(@PathVariable Long id, HttpServletRequest req) {
+	public ResponseEntity<?> deleteJob(@PathVariable String id, HttpServletRequest req) {
+		
 		User user = jwtProvider.getUserFromAuthorizationHeader(req);
 		Subscription service = serviceRepository.findByIdOrUserId(user.getId(), user.getId())
-				.orElseThrow(() -> new BadRequestException("No active subscription was found for the current user. Please chose a subscription and subscribe again."));
+				.orElseThrow(() -> new BadRequestException("You need to have an active subscription in order to delete a job."));
 		
-		Job job = jobService.loadById(id).orElseThrow(
-				() -> new BadRequestException("No job found by id " + id));
-		jobService.delete(job);
+		jobService.delete(id);
 		return ResponseEntity.ok(new ApiResponse(true, "Job was deleted."));
+	}
+	
+	@PostMapping("/search")
+	public List<Job> searchFuzzyJob(@Valid @RequestBody JobRequest jobReq) {
+		return jobService.fuzzySearch(jobReq.getQuery());
 	}
 }
